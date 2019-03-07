@@ -5,7 +5,7 @@
 # Lo script effettua:
 # 1) Check data
 # 2) Recupero BCK
-# 3) Resize del disco
+# 3) Installazione e Ripristino DHCP Server
 # 4) Personalizzazione Profile
 # 5) Modifica configurazione rete, file hosts e hostname
 # 6) Update sistema
@@ -15,7 +15,7 @@
 # Script creato da Marco de Santis
 
 ## EXPORT VARIABILI ##
-data=""
+data="06_03_2019_1000"
 ip_nas="192.168.123.8"
 user_nas="admin"
 path_nas="/share/CACHEDEV1_DATA/MASTER-BCK/"
@@ -53,20 +53,51 @@ fi
 
 ## FUNZIONE RECUPERO BCK ##
 function recupero_bck {
-scp -r ${user_nas}@${ip_nas}:${path_servizi}/bind/bind_${data}.tar /home/thegod/
-scp -r ${user_nas}@${ip_nas}:${path_mysql}/*_${data}.sql /home/thegod/
-scp -r ${user_nas}@${ip_nas}:${path_certificati}/*_${data}.tar /home/thegod/
-scp -r ${user_nas}@${ip_nas}:${path_servizi}/apache2/apache2_${data}.tar /home/thegod/
-scp -r ${user_nas}@${ip_nas}:${path_contenuti}/WebServer_*_${data}.tar.gz /home/thegod/
-scp -r ${user_nas}@${ip_nas}:${path_servizi}/dovecot/dovecot_${data}.tar /home/thegod/
-scp -r ${user_nas}@${ip_nas}:${path_servizi}/spamassassin/spamassassin_${data}.tar /home/thegod/
-scp -r ${user_nas}@${ip_nas}:${path_servizi}/postfix/postfix_${data}.tar /home/thegod/
-scp -r ${user_nas}@${ip_nas}:${path_mail}/imap_mail_${data}.tar /home/thegod/
-scp -r ${user_nas}@${ip_nas}:${path_homebridge}/homebridge*${data}.tar /home/thegod/ >> /home/thegod/03_homebridge.log
+scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_servizi}/dhcp/dhcp_${data}.tar /home/thegod/
+scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_servizi}/bind/bind_${data}.tar /home/thegod/
+scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_mysql}/*_${data}.sql /home/thegod/
+scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_certificati}/*_${data}.tar /home/thegod/
+scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_servizi}/apache2/apache2_${data}.tar /home/thegod/
+scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_contenuti}/WebServer_*_${data}.tar.gz /home/thegod/
+scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_servizi}/dovecot/dovecot_${data}.tar /home/thegod/
+scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_servizi}/spamassassin/spamassassin_${data}.tar /home/thegod/
+scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_servizi}/postfix/postfix_${data}.tar /home/thegod/
+scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_mail}/imap_mail_${data}.tar /home/thegod/
+scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_homebridge}/homebridge*${data}.tar /home/thegod/ >> /home/thegod/03_homebridge.log
 }
 
+## FUNZIONE INSTALLAZIONE DHCP ##
+
+function install_dhcp {
+apt-get install isc-dhcp-server -y
+}
+
+## FUNZIONE GESTIONE FILE DI LOG DHCP ##
+function dhcp_log {
+mkdir /var/log/dhcpd/
+chown -R syslog:adm /var/log/dhcpd
+echo "local7.debug    /var/log/dhcpd/dhcpd.log" >> /etc/rsyslog.d/10-fixed_ip.conf
+sed -i "s/INTERFACESv4=\"\"/INTERFACESv4=\"eth0\"/g" /etc/default/isc-dhcp-server
+}
+
+## FUNZIONE RIPRISTINO BCK DHCP ##
+function ripristino_dhcp {
+tar -xvf dhcp_${data}.tar
+cp /home/thegod/etc/dhcp/dhcpd.conf /etc/dhcp/
+cp /home/thegod/etc/dhcp/fixed_ip.conf /etc/dhcp/
+}
+
+## FUNZIONE RESTART SERVIZI DHCP ##
+function restart_dhcp {
+systemctl restart rsyslog
+systemctl restart isc-dhcp-server
+}
 
 #inizio_script
 #check_utente
 #check_data
-recupero_bck
+#recupero_bck
+#install_dhcp
+#dhcp_log
+#ripristino_dhcp
+#restart_dhcp
