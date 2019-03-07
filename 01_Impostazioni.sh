@@ -1,5 +1,17 @@
 #!/bin/bash
-# script finali
+# script finali per la migrazione da Ubuntu 16 a Ubuntu 18
+# Primo script da eseguire
+# Lo script effettua:
+# 1) Rimozione pacchetti non utili
+# 2) Inserimento chiavi SSH
+# 3) Resize del disco
+# 4) Personalizzazione Profile
+# 5) Modifica configurazione rete, file hosts e hostname
+# 6) Update sistema
+# 7) Rimozione Firewall
+# 8) Sync orario
+#
+# Script creato da Marco de Santis
 
 ## FUNZIONE INZIO SCRIPT ##
 function inizio_script {
@@ -36,7 +48,7 @@ read lv
 lvextend -L+${giga}G ${lv}
 resize2fs ${lv}
 df -h / >> /home/thegod/01_Impostazioni.log
-}
+
 }
 
 ## FUNZIONE CHIAVI SSH ##
