@@ -11,6 +11,7 @@
 # 6) Crezione cartelle
 # 7) Ripristino Key File LG
 # 8) Creazione File config.json
+# 9) Creazione file di init
 
 ## EXPORT VARIABILI ##
 data="06_03_2019_1000"
@@ -410,6 +411,105 @@ echo "Rimuovo la dir non usata $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_ho
 rm -rf /home/thegod/.homebridge
 }
 
+## FUNZIONE CREAZIONE INIT CASINA ##
+function init_casina {
+echo "CREO IL FILE DI INIT CASINA $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
+sudo echo "[Unit]
+Description=Node.js HomeKit Server
+After=syslog.target network-online.target
+
+[Service]
+Type=simple
+User=thegod
+EnvironmentFile=/etc/default/homebridge_casina
+# Adapt this to your specific setup (could be /usr/bin/homebridge)
+# See comments below for more information
+ExecStart=/usr/local/bin/homebridge_casina \$HOMEBRIDGE_OPTS
+Restart=on-failure
+RestartSec=3
+KillMode=process
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=homebridge_casina
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/homebridge_casina.service
+}
+
+## FUNZIONE CREAZIONE INIT SECURITY ##
+function init_security {
+echo "CREO IL FILE DI INIT SECURITY $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
+sudo echo "[Unit]
+Description=Node.js HomeKit Server
+After=syslog.target network-online.target
+
+[Service]
+Type=simple
+User=thegod
+EnvironmentFile=/etc/default/homebridge_security
+# Adapt this to your specific setup (could be /usr/bin/homebridge)
+# See comments below for more information
+ExecStart=/usr/local/bin/homebridge_security \$HOMEBRIDGE_OPTS
+Restart=on-failure
+RestartSec=3
+KillMode=process
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=homebridge_security
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/homebridge_security.service
+}
+
+## FUNZIONE CREAZIONE INIT HARMONY ##
+function init_harmony {
+echo "CREO IL FILE DI HARMONY $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
+sudo echo "[Unit]
+Description=Node.js HomeKit Server
+After=syslog.target network-online.target
+
+[Service]
+Type=simple
+User=thegod
+EnvironmentFile=/etc/default/homebridge_harmony
+# Adapt this to your specific setup (could be /usr/bin/homebridge)
+# See comments below for more information
+ExecStart=/usr/local/bin/homebridge_harmony \$HOMEBRIDGE_OPTS
+Restart=on-failure
+RestartSec=3
+KillMode=process
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=homebridge_harmony
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/homebridge_harmony.service
+}
+
+## FUNZIONE CREAZIONE INIT LGVT ##
+function init_lgvt {
+echo "CREO IL FILE DI LGTV $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
+echo "[Unit]
+Description=Node.js HomeKit Server
+After=syslog.target network-online.target
+
+[Service]
+Type=simple
+User=thegod
+EnvironmentFile=/etc/default/homebridge_lgtv
+# Adapt this to your specific setup (could be /usr/bin/homebridge)
+# See comments below for more information
+ExecStart=/usr/local/bin/homebridge_lgtv \$HOMEBRIDGE_OPTS
+Restart=on-failure
+RestartSec=3
+KillMode=process
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=homebridge_lgtv
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/homebridge_lgtv.service
+}
 #inizio_script
 #check_utente
 #installa_nodejs
@@ -422,5 +522,9 @@ rm -rf /home/thegod/.homebridge
 #crea_config_security
 #crea_config_lgtv
 #crea_config_harmony
-cambio_permessi
-rimuovi_dir
+#cambio_permessi
+#rimuovi_dir
+init_casina
+init_security
+init_harmony
+init_lgvt
