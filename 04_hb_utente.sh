@@ -145,9 +145,20 @@ sudo rm -rf *.sql
 sudo rm -rf home var etc
 }
 
+## FUNZIONE ARCHIVIAZIONE ##
+function archivia {
+echo "Archivio tutto $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_hb_utente.log
+mkdir Migrazione
+mkdir Migrazione/Logs
+mkdir Migrazione/Script
+sudo mv *.log Migrazione/Logs/
+sudo mv *.sh Migrazione/Script/
+sudo chown -R thegod:thegod Migrazione
+}
+
 ## FUNZIONE FINE SCRIPT ##
 function fine_script {
-echo "Fine Script: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_hb_utente.log
+echo "Fine Script: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/Migrazione/Logs/04_hb_utente.log
 }
 
 inizio_script
@@ -162,4 +173,5 @@ installa_harmony
 check_permessi
 riavvio_servizi
 rimuovi_bck
+archivia
 fine_script
