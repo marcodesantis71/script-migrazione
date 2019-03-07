@@ -49,7 +49,21 @@ else
 fi
 }
 
+## FUNZIONE INSTALLAZIONE PLUGIN NETATMO ##
+function installa_netatmo {
+echo "Installo plugin netatmo $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_hb_utente.log
+sudo npm install -g --unsafe-perm homebridge-eveatmo
+if [[ $? != 0 ]] ;
+then
+        echo "Netatmo Plugin in errore. Riprovo" >> /home/thegod/04_hb_utente.log
+        sudo npm install -g --unsafe-perm homebridge-eveatmo
+else
+        echo "Netatmo Plugin Installato correttamente" >> /home/thegod/04_hb_utente.log
+fi
+}
+
 #inizio_script
 #check_utente
 #installa_foscam
-installa_webos
+#installa_webos
+installa_netatmo
