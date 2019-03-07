@@ -32,7 +32,7 @@ read giga
 echo "Dammi il LV:"
 read lv
 
-lvextend -L+${$giga}G {$lv}
+lvextend -L+${giga}G {$lv}
 resize2fs ${lv}
 }
 
