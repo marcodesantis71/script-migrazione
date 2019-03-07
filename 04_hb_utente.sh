@@ -23,5 +23,19 @@ if [ "$(whoami)" != "thegod" ]; then
 fi
 }
 
-inizio_script
-check_utente
+## FUNZIONE INSTALLAZIONE PLUGIN FOSCAM ##
+function installa_foscam {
+echo "Installo plugin Foscam $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_hb_utente.log
+sudo npm install -g --unsafe-perm homebridge-foscamcamera
+if [[ $? != 0 ]] ;
+then
+        echo "Homebridge in errore. Riprovo" >> /home/thegod/04_hb_utente.log
+        sudo npm install -g --unsafe-perm homebridge-foscamcamera
+else
+        echo "Homebrdige Installato correttamente" >> /home/thegod/04_hb_utente.log
+fi
+}
+
+#inizio_script
+#check_utente
+installa_foscam
