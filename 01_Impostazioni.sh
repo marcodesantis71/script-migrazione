@@ -7,7 +7,7 @@ echo "Inizio Script: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/01_Impostazioni
 }
 
 ## FUNZIONE CHECK UTENTE ##
-funciont check_utente {
+function check_utente {
 echo "Controllo l'utente $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/01_Impostazioni.log
 
 if [ "$(whoami)" != "root" ]; then
@@ -29,11 +29,14 @@ echo "Sistemo lo spazio $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/01_Impostazi
 vgdisplay
 echo "Dammi i giga:"
 read giga
+lvdisplay
 echo "Dammi il LV:"
 read lv
 
-lvextend -L+${giga}G {$lv}
+lvextend -L+${giga}G ${lv}
 resize2fs ${lv}
+df -h / >> /home/thegod/01_Impostazioni.log
+}
 }
 
 ## FUNZIONE CHIAVI SSH ##
@@ -42,7 +45,6 @@ function user_key {
 echo "CONFIGURAZIONE SSH" ### ">> /home/thegod/01_Impostazioni.log
 echo "COPIO CHIAVI $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/01_Impostazioni.log
 mkdir /home/thegod/.ssh
-mkdir /root/.ssh
 
 echo "
 -----BEGIN RSA PRIVATE KEY-----
@@ -279,15 +281,20 @@ chown thegod:thegod /home/thegod/.bash_profile
 ## FUNZIONE FILE HOSTS ##
 function file_hosts {
 echo "Sistemo file hosts $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/01_Impostazioni.log
+echo "File Hosts prima della modifica" >> /home/thegod/01_Impostazioni.log
+cat /etc/hosts >> /home/thegod/01_Impostazioni.log
 echo "IMPOSTO FILE HOST $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/01_Impostazioni.log
 echo "192.168.123.10 imap.sistemiesistemi.it master.sistemiesistemi.it imap.svapolandia.it" >> /etc/hosts
 sed -i '/127.0.0.1/d' /etc/hosts
 sed -i '1i 127.0.0.1 imap.sistemiesistemi imap localhost master master.sistemiesistemi.it' /etc/hosts
+echo "File Hosts dopo della modifica" >> /home/thegod/01_Impostazioni.log
+cat /etc/hosts >> /home/thegod/01_Impostazioni.log
 }
 
 ## FUNZIONE HOSTNAME ##
 function change_hostname {
 echo "master" > /etc/hostname
+echo "Hostname attivo dopo il reboot" >> /home/thegod/01_Impostazioni.log
 }
 
 ## FUNZIONE UPDATE SISTEMA ##
@@ -309,10 +316,14 @@ apt-get remove ufw -y
 ## FUNZIONE ORARIO ##
 function sync_orario {
 echo "INSTALLO CRHONY $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/01_Impostazioni.log
+echo "Data prima del sync orario" >> /home/thegod/01_Impostazioni.log
+date >> /home/thegod/01_Impostazioni.log
 timedatectl set-timezone Europe/Rome
 apt-get install chrony wget -y
 systemctl start chrony
 systemctl enable chrony
+echo "Data dopo il sync orario" >> /home/thegod/01_Impostazioni.log
+date >> /home/thegod/01_Impostazioni.log
 }
 
 ## FUNZIONE RIPRISTINO ETH0 ##
