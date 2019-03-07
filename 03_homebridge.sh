@@ -16,7 +16,7 @@
 # 11) Creazione nuovi binari e relativa modifica e link
 # 12) Creazione log
 #
-# Script creato da Marco de Santi
+# Script creato da Marco de Santis
 
 ## EXPORT VARIABILI ##
 data="06_03_2019_1000"
@@ -621,31 +621,31 @@ function fine_script {
 echo "Fine Script: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
 }
 
-#inizio_script
-#check_utente
-#installa_repo
-#installa_node_npm
-#installa_pre
-#installa_homebridge
-#crea_cartelle
-#key_lg
-#crea_config_casina
-#crea_config_security
-#crea_config_lgtv
-#crea_config_harmony
-#cambio_permessi
-#rimuovi_dir
+inizio_script
+check_utente
+installa_repo
+installa_node_npm
+installa_pre
+installa_homebridge
+crea_cartelle
+key_lg
+crea_config_casina
+crea_config_security
+crea_config_lgtv
+crea_config_harmony
+cambio_permessi
+rimuovi_dir
 init_casina
 init_security
 init_harmony
 init_lgvt
 permessi_init
-#conf_demone_casina
-#conf_demone_security
-#conf_demone_harmony
-#conf_demone_lvtg
-#crea_binari
-#sed_binari
-#crea_link
-#crea_log
-#fine_script
+conf_demone_casina
+conf_demone_security
+conf_demone_harmony
+conf_demone_lvtg
+crea_binari
+sed_binari
+crea_link
+crea_log
+fine_script
