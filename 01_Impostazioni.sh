@@ -305,8 +305,6 @@ cat /etc/hosts >> /home/thegod/01_Impostazioni.log
 
 ## FUNZIONE HOSTNAME ##
 function change_hostname {
-sed -i '/preserve_hostname/d' /etc/cloud/cloud.cfg
-echo "preserve_hostname: true" >> /etc/cloud/cloud.cfg
 hostnamectl set-hostname master
 echo "Hostname attivo dopo il reboot" >> /home/thegod/01_Impostazioni.log
 }

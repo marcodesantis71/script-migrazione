@@ -429,7 +429,7 @@ User=thegod
 EnvironmentFile=/etc/default/homebridge_casina
 # Adapt this to your specific setup (could be /usr/bin/homebridge)
 # See comments below for more information
-ExecStart=/usr/local/bin/homebridge_casina \$HOMEBRIDGE_OPTS
+ExecStart=/usr/bin/homebridge_casina \$HOMEBRIDGE_OPTS
 Restart=on-failure
 RestartSec=3
 KillMode=process
@@ -454,7 +454,7 @@ User=thegod
 EnvironmentFile=/etc/default/homebridge_security
 # Adapt this to your specific setup (could be /usr/bin/homebridge)
 # See comments below for more information
-ExecStart=/usr/local/bin/homebridge_security \$HOMEBRIDGE_OPTS
+ExecStart=/usr/bin/homebridge_security \$HOMEBRIDGE_OPTS
 Restart=on-failure
 RestartSec=3
 KillMode=process
@@ -479,7 +479,7 @@ User=thegod
 EnvironmentFile=/etc/default/homebridge_harmony
 # Adapt this to your specific setup (could be /usr/bin/homebridge)
 # See comments below for more information
-ExecStart=/usr/local/bin/homebridge_harmony \$HOMEBRIDGE_OPTS
+ExecStart=/usr/bin/homebridge_harmony \$HOMEBRIDGE_OPTS
 Restart=on-failure
 RestartSec=3
 KillMode=process
@@ -504,7 +504,7 @@ User=thegod
 EnvironmentFile=/etc/default/homebridge_lgtv
 # Adapt this to your specific setup (could be /usr/bin/homebridge)
 # See comments below for more information
-ExecStart=/usr/local/bin/homebridge_lgtv \$HOMEBRIDGE_OPTS
+ExecStart=/usr/bin/homebridge_lgtv \$HOMEBRIDGE_OPTS
 Restart=on-failure
 RestartSec=3
 KillMode=process
@@ -573,28 +573,28 @@ HOMEBRIDGE_OPTS=-D -I -U /home/thegod/.homebridge_lgtv/
 ## FUNZIONE NUOVI BINARI ##
 function crea_binari {
 echo "Creo i nuovi binari $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
-sudo cp /usr/local/lib/node_modules/homebridge/bin/homebridge /usr/local/lib/node_modules/homebridge/bin/homebridge_casina
-sudo cp /usr/local/lib/node_modules/homebridge/bin/homebridge /usr/local/lib/node_modules/homebridge/bin/homebridge_lgtv
-sudo cp /usr/local/lib/node_modules/homebridge/bin/homebridge /usr/local/lib/node_modules/homebridge/bin/homebridge_security
-sudo cp /usr/local/lib/node_modules/homebridge/bin/homebridge /usr/local/lib/node_modules/homebridge/bin/homebridge_harmony
+sudo cp /usr/lib/node_modules/homebridge/bin/homebridge /usr/lib/node_modules/homebridge/bin/homebridge_casina
+sudo cp /usr/lib/node_modules/homebridge/bin/homebridge /usr/lib/node_modules/homebridge/bin/homebridge_lgtv
+sudo cp /usr/lib/node_modules/homebridge/bin/homebridge /usr/lib/node_modules/homebridge/bin/homebridge_security
+sudo cp /usr/lib/node_modules/homebridge/bin/homebridge /usr/lib/node_modules/homebridge/bin/homebridge_harmony
 }
 
 ## FUNZIONE SED BINARI ISTANZE ##
 function sed_binari {
 echo "Sistemo i nuovi binari $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
-sudo sed -i 's/homebridge/homebridge_casina/g' /usr/local/lib/node_modules/homebridge/bin/homebridge_casina
-sudo sed -i 's/homebridge/homebridge_lgtv/g' /usr/local/lib/node_modules/homebridge/bin/homebridge_lgtv
-sudo sed -i 's/homebridge/homebridge_security/g' /usr/local/lib/node_modules/homebridge/bin/homebridge_security
-sudo sed -i 's/homebridge/homebridge_harmony/g' /usr/local/lib/node_modules/homebridge/bin/homebridge_harmony
+sudo sed -i 's/homebridge/homebridge_casina/g' /usr/lib/node_modules/homebridge/bin/homebridge_casina
+sudo sed -i 's/homebridge/homebridge_lgtv/g' /usr/lib/node_modules/homebridge/bin/homebridge_lgtv
+sudo sed -i 's/homebridge/homebridge_security/g' /usr/lib/node_modules/homebridge/bin/homebridge_security
+sudo sed -i 's/homebridge/homebridge_harmony/g' /usr/lib/node_modules/homebridge/bin/homebridge_harmony
 }
 
 ## FUNZIONE LINK SIMBOLICI ##
 function crea_link {
 echo "Creo i nuovi link ai nuovi binari $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
-sudo ln -s /usr/local/lib/node_modules/homebridge/bin/homebridge_casina /usr/local/bin/homebridge_casina
-sudo ln -s /usr/local/lib/node_modules/homebridge/bin/homebridge_lgtv /usr/local/bin/homebridge_lgtv
-sudo ln -s /usr/local/lib/node_modules/homebridge/bin/homebridge_security /usr/local/bin/homebridge_security
-sudo ln -s /usr/local/lib/node_modules/homebridge/bin/homebridge_harmony /usr/local/bin/homebridge_harmony
+sudo ln -s /usr/lib/node_modules/homebridge/bin/homebridge_casina /usr/bin/homebridge_casina
+sudo ln -s /usr/lib/node_modules/homebridge/bin/homebridge_lgtv /usr/bin/homebridge_lgtv
+sudo ln -s /usr/lib/node_modules/homebridge/bin/homebridge_security /usr/bin/homebridge_security
+sudo ln -s /usr/lib/node_modules/homebridge/bin/homebridge_harmony /usr/bin/homebridge_harmony
 }
 
 ## FUNZIONE LOG ##
@@ -621,31 +621,31 @@ function fine_script {
 echo "Fine Script: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
 }
 
-inizio_script
-check_utente
-installa_repo
-installa_node_npm
-installa_pre
-installa_homebridge
-crea_cartelle
-key_lg
-crea_config_casina
-crea_config_security
-crea_config_lgtv
-crea_config_harmony
-cambio_permessi
-rimuovi_dir
+#inizio_script
+#check_utente
+#installa_repo
+#installa_node_npm
+#installa_pre
+#installa_homebridge
+#crea_cartelle
+#key_lg
+#crea_config_casina
+#crea_config_security
+#crea_config_lgtv
+#crea_config_harmony
+#cambio_permessi
+#rimuovi_dir
 init_casina
 init_security
 init_harmony
 init_lgvt
 permessi_init
-conf_demone_casina
-conf_demone_security
-conf_demone_harmony
-conf_demone_lvtg
-crea_binari
-sed_binari
-crea_link
-crea_log
-fine_script
+#conf_demone_casina
+#conf_demone_security
+#conf_demone_harmony
+#conf_demone_lvtg
+#crea_binari
+#sed_binari
+#crea_link
+#crea_log
+#fine_script
