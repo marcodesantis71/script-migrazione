@@ -62,8 +62,22 @@ else
 fi
 }
 
+## FUNZIONE INSTALLAZIONE PLUGIN BROADLINK ##
+function installa_broadlink {
+echo "Installo plugin broadlink $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_hb_utente.log
+sudo npm install -g --unsafe-perm homebridge-broadlink-rm
+if [[ $? != 0 ]] ;
+then
+        echo "Broadlink Plugin in errore. Riprovo" >> /home/thegod/04_hb_utente.log
+        sudo npm install -g --unsafe-perm homebridge-broadlink-rm
+else
+        echo "Broadlink Plugin Installato correttamente" >> /home/thegod/04_hb_utente.log
+fi
+}
+
 #inizio_script
 #check_utente
 #installa_foscam
 #installa_webos
-installa_netatmo
+#installa_netatmo
+installa_broadlink
