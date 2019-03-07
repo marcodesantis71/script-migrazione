@@ -8,6 +8,7 @@
 # 3) Installazione e Ripristino DHCP Server
 # 4) Installazione e Ripristino DNS Server
 # 5) Installazione Apache
+# 6) Installazione MySQL e Ripristino DB
 #
 # Script creato da Marco de Santis
 
@@ -142,6 +143,69 @@ echo "RIAVVIO APACHE2 $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.
 systemctl restart apache2
 }
 
+## FUNZIONE INSTALLAZIONE MYSQL ##
+function install_mysql {
+echo "INSTALLO DB $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+apt-get install mysql-server -y
+apt-get install php-curl php-gd php-mbstring php-xml php-xmlrpc php-soap php-intl php-zip -y
+}
+
+## FUNZIONE MESSA IN SICUREZZA MYSQL ##
+function security_mysql {
+echo "Metto in sicurezza il DB $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+mysql --user=root <<_EOF_
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD("\$M4cB00kR3t1n4\$");
+DELETE FROM mysql.user WHERE User='';
+DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
+DROP DATABASE IF EXISTS test;
+DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
+FLUSH PRIVILEGES;
+_EOF_
+}
+
+## FUNZIONE FILE LOGIN DB ##
+function crea_cnf {
+echo "Preparo file per login di backup  $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+echo "
+[client]
+user = root
+password = \$M4cB00kR3t1n4\$" >> /root/.mylogin.cnf
+chmod 600 /root/.mylogin.cnf
+}
+
+## FUNZIONE CREAZIONE DB ##
+function crea_db {
+echo "CREO DB $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+mysql -uroot -p$M4cB00kR3t1n4$ -e "CREATE DATABASE sistemiesistemi /*\!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */;"
+mysql -uroot -p$M4cB00kR3t1n4$ -e "GRANT ALL ON sistemiesistemi.* TO 'user_sistemi'@'localhost' IDENTIFIED BY 'M4rc03S4r4!';"
+mysql -uroot -p$M4cB00kR3t1n4$ -e "CREATE DATABASE svapolandia /*\!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */;"
+mysql -uroot -p$M4cB00kR3t1n4$ -e "GRANT ALL ON svapolandia.* TO 'user_svapo'@'localhost' IDENTIFIED BY 'Us3r_Sv4p0_L4nd14';"
+mysql -uroot -p$M4cB00kR3t1n4$ -e "CREATE DATABASE webmail_ss /*\!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */;"
+mysql -uroot -p$M4cB00kR3t1n4$ -e "GRANT ALL ON webmail_ss.* TO 'roundcube'@'localhost' IDENTIFIED BY 'M4rc03S4r4';"
+mysql -uroot -p$M4cB00kR3t1n4$ -e "CREATE DATABASE webmail_linux /*\!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */;"
+mysql -uroot -p$M4cB00kR3t1n4$ -e "GRANT ALL ON webmail_linux.* TO 'roundcube'@'localhost' IDENTIFIED BY 'M4rc03S4r4';"
+mysql -uroot -p$M4cB00kR3t1n4$ -e "CREATE DATABASE dituttoedipiu /*\!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */;"
+mysql -uroot -p$M4cB00kR3t1n4$ -e "GRANT ALL ON dituttoedipiu.* TO 'user_ditutto'@'localhost' IDENTIFIED BY 'M4rc03S4r4!';"
+mysql -uroot -p$M4cB00kR3t1n4$ -e "CREATE DATABASE linuxguide /*\!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */;"
+mysql -uroot -p$M4cB00kR3t1n4$ -e "GRANT ALL ON linuxguide.* TO 'user_linux'@'localhost' IDENTIFIED BY 'M4rc03S4r4!';"
+mysql -uroot -p$M4cB00kR3t1n4$ -e "CREATE DATABASE notizarionews /*\!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */;"
+mysql -uroot -p$M4cB00kR3t1n4$ -e "GRANT ALL ON notizarionews.* TO 'user_notizario'@'localhost' IDENTIFIED BY 'Us3r_N0t1z14R10N3ws';"
+mysql -uroot -p$M4cB00kR3t1n4$ -e "CREATE DATABASE servermail /*\!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */;"
+mysql -uroot -p$M4cB00kR3t1n4$ -e "GRANT ALL ON servermail.* TO 'usermail'@'localhost' IDENTIFIED BY 'M4rc03S4r4!';"
+}
+
+## FUNZIONE RIPRISTINO DB ##
+function ripristino_db {
+echo "IMPORTO DB $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+mysql -u user_sistemi -pM4rc03S4r4! sistemiesistemi < sistemiesistemi_${data}.sql
+mysql -u user_svapo -pUs3r_Sv4p0_L4nd14 svapolandia < svapolandia_${data}.sql
+mysql -u roundcube -pM4rc03S4r4 webmail_ss < webmail_ss_${data}.sql
+mysql -u roundcube -pM4rc03S4r4 webmail_linux < webmail_linux_${data}.sql
+mysql -u user_ditutto -pM4rc03S4r4! dituttoedipiu < dituttoedipiu_${data}.sql
+mysql -u user_linux -pM4rc03S4r4! linuxguide < linuxguide_${data}.sql
+mysql -u user_notizario -pUs3r_N0t1z14R10N3ws notizarionews < notizarionews_${data}.sql
+mysql -u usermail -pM4rc03S4r4! servermail < servermail_${data}.sql
+}
 
 #inizio_script
 #check_utente
@@ -158,3 +222,8 @@ systemctl restart apache2
 install_apache2
 #abilita_moduli
 #restart_apache2
+install_mysql
+#security_mysql
+#crea_cnf
+#crea_db
+#ripristino_db
