@@ -510,6 +510,13 @@ SyslogIdentifier=homebridge_lgtv
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/homebridge_lgtv.service
 }
+
+## FUNZIONE PERMESSI FILE INIT ##
+function permessi_init {
+echo "Sistemo i permessi $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
+chmod 644 /etc/systemd/system/homebridge_*
+}
+
 #inizio_script
 #check_utente
 #installa_nodejs
@@ -524,7 +531,8 @@ WantedBy=multi-user.target" > /etc/systemd/system/homebridge_lgtv.service
 #crea_config_harmony
 #cambio_permessi
 #rimuovi_dir
-init_casina
-init_security
-init_harmony
-init_lgvt
+#init_casina
+#init_security
+#init_harmony
+#init_lgvt
+permessi_init
