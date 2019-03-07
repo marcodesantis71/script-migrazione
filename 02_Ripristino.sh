@@ -9,6 +9,7 @@
 # 4) Installazione e Ripristino DNS Server
 # 5) Installazione Apache
 # 6) Installazione MySQL e Ripristino DB
+# 7) Installazione LetsEncrypt e Ripristino Certificati
 #
 # Script creato da Marco de Santis
 
@@ -207,6 +208,22 @@ mysql -u user_notizario -pUs3r_N0t1z14R10N3ws notizarionews < notizarionews_${da
 mysql -u usermail -pM4rc03S4r4! servermail < servermail_${data}.sql
 }
 
+## FUNZIONE INSTALLAZIONE LETSENCRYPT ##
+function installo_certbot {
+echo "Install LETSENCRYPT $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+add-apt-repository ppa:certbot/certbot -y
+apt-get install certbot python-certbot-apache -y
+}
+
+## FUNZIONE RIPRISTINO CERTIFICATI ##
+function ripristino_certificati {
+echo "Sostituisco i certificato $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+tar -xvf /home/thegod/sistemiesistemi_cert_${data}.tar
+tar -xvf /home/thegod/lets_cert_${data}.tar
+mv /home/thegod/etc/ssl/sistemiesistemi/ /etc/ssl/
+cp -R /home/thegod/etc/letsencrypt/* /etc/letsencrypt
+}
+
 #inizio_script
 #check_utente
 #check_data
@@ -219,7 +236,7 @@ mysql -u usermail -pM4rc03S4r4! servermail < servermail_${data}.sql
 #ripristino_dns
 #modifica_dns
 #restart_dns
-install_apache2
+#install_apache2
 #abilita_moduli
 #restart_apache2
 install_mysql
@@ -227,3 +244,5 @@ install_mysql
 #crea_cnf
 #crea_db
 #ripristino_db
+installo_certbot
+#ripristino_certificati
