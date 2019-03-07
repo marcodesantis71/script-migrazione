@@ -12,6 +12,8 @@
 # 7) Installazione LetsEncrypt e Ripristino Certificati
 # 8) Ripristino Apache2
 # 9) Ripristino Contenuti Statici
+# 10) Installazione Mail e Ripristino da Backup
+# 11) Riavvio Servizi
 #
 # Script creato da Marco de Santis
 
@@ -277,6 +279,100 @@ echo "Riavvio apache $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.l
 systemctl restart apache2
 }
 
+## FUNZIONE INSTALLAZIONE CORE MAIL ##
+function installa_mail {
+echo "Installo le componenti mail $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+echo "postfix postfix/mailname string imap.sistemiesistemi.it" | debconf-set-selections
+echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections
+apt install postfix postfix-mysql dovecot-core dovecot-imapd dovecot-lmtpd dovecot-mysql spamassassin spamc -y
+}
+
+## FUNZIONE CREAZIONE UTENTE spamd ##
+function crea_spamd {
+echo "Creo Utente spamd $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+useradd -m spamd
+groupadd -g 5000 vmail
+useradd -g vmail -u 5000 vmail -d /var/mail
+}
+
+## FUNZIONE RIPRISTINO PERMESSI UTENTE spamd ##
+function permessi_spamd {
+echo "Sistemo i permessi vmail $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+chown -R vmail:vmail /var/mail
+chown -R vmail:dovecot /etc/dovecot
+chmod -R o-rwx /etc/dovecot
+}
+
+## FUNZIONE RIPRISTINO CONFIGURAZIONE POSTA ##
+function ripristino_conf_posta {
+echo "Ripristino la configurazione della posta $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+tar -xvf /home/thegod/dovecot_${data}.tar
+tar -xvf /home/thegod/spamassassin_${data}.tar
+tar -xvf /home/thegod/postfix_${data}.tar
+cp -R /home/thegod/etc/dovecot/* /etc/dovecot/
+cp -R /home/thegod/etc/postfix/* /etc/postfix/
+cp -R /home/thegod/etc/spamassassin/* /etc/spamassassin/
+}
+
+## FUNZIONE PREPARAZIONE CARTELLE MAIL ##
+function prepara_dir {
+echo "Preparo le dir per le mail $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+mkdir /var/mail/vhosts
+chown -R vmail:vmail /var/mail/vhosts
+}
+
+## FUNZIONE RIPRISTINO MAIL ##
+function ripristino_mail {
+echo "Ripristino le mail $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+tar -xvf /home/thegod/imap_mail_${data}.tar
+cp -R /home/thegod/var/mail/vhosts/* /var/mail/vhosts/
+chown -R vmail:vmail /var/mail/vhosts
+}
+
+## FUNZIONE CREAZIONE DH ##
+function crea_dh {
+echo "Creo il file dh.pem $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+openssl dhparam -out /etc/letsencrypt/live/imap.sistemiesistemi.it/dhparam.pem 4096
+}
+
+## FUNZIONE ABILITAZIONE DH ##
+function abilita_dh {
+echo "Abilito dh.pem $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+echo "ssl_dh = </etc/letsencrypt/live/imap.sistemiesistemi.it/dhparam.pem" >> /etc/dovecot/conf.d/10-ssl.conf
+}
+
+## FUNZIONE INSTALLAZIONE MUTT ##
+function installa_mutt {
+echo "Install mutt $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+apt-get install mutt -y
+}
+
+## FUNZIONE CONFIGURAZIONE MUTT ##
+function configura_mutt {
+echo "Imposto la configurazione di mutt $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+echo "set copy=no" > /home/thegod/.muttrc
+chown thegod:thegod /home/thegod/.muttrc
+echo "set copy=no" > /root/.muttrc
+}
+
+## FUNZIONE RIAVVIO SERVIZI ##
+function riavvio_servizi {
+echo "Riavvio e abilito tutti i servizi al boot $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+systemctl restart isc-dhcp-server
+systemctl restart bind9
+systemctl restart apache2
+systemctl restart postfix
+systemctl restart dovecot
+systemctl restart spamassassin
+systemctl enable isc-dhcp-server
+systemctl enable bind9
+systemctl enable apache2
+systemctl enable postfix
+systemctl enable dovecot
+systemctl enable spamassassin
+echo "Fine Script: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+}
+
 #inizio_script
 #check_utente
 #check_data
@@ -302,5 +398,16 @@ systemctl restart apache2
 #ripristino_apache2
 #disattiva_moduli
 #log_apache
-ripristino_contenuti_statici
+#ripristino_contenuti_statici
 #restart_apache_conf
+#installa_mail
+#crea_spamd
+#permessi_spamd
+#ripristino_conf_posta
+#prepara_dir
+#ripristino_mail
+#crea_dh
+#abilita_dh
+#installa_mutt
+#configura_mutt
+riavvio_servizi

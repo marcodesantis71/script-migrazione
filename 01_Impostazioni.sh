@@ -305,7 +305,7 @@ cat /etc/hosts >> /home/thegod/01_Impostazioni.log
 
 ## FUNZIONE HOSTNAME ##
 function change_hostname {
-echo "master" > /etc/hostname
+hostnamectl set-hostname master
 echo "Hostname attivo dopo il reboot" >> /home/thegod/01_Impostazioni.log
 }
 
