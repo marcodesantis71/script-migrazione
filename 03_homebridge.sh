@@ -13,7 +13,8 @@
 # 8) Creazione File config.json
 # 9) Creazione file di init
 # 10) Crea file di configurazione del demone
-# 11) Creazione nuovi binari e relativa modifica
+# 11) Creazione nuovi binari e relativa modifica e link
+# 12) Creazione log
 
 ## EXPORT VARIABILI ##
 data="06_03_2019_1000"
@@ -585,6 +586,39 @@ sudo sed -i 's/homebridge/homebridge_security/g' /usr/local/lib/node_modules/hom
 sudo sed -i 's/homebridge/homebridge_harmony/g' /usr/local/lib/node_modules/homebridge/bin/homebridge_harmony
 }
 
+## FUNZIONE LINK SIMBOLICI ##
+function crea_link {
+echo "Creo i nuovi link ai nuovi binari $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
+sudo ln -s /usr/local/lib/node_modules/homebridge/bin/homebridge_casina /usr/local/bin/homebridge_casina
+sudo ln -s /usr/local/lib/node_modules/homebridge/bin/homebridge_lgtv /usr/local/bin/homebridge_lgtv
+sudo ln -s /usr/local/lib/node_modules/homebridge/bin/homebridge_security /usr/local/bin/homebridge_security
+sudo ln -s /usr/local/lib/node_modules/homebridge/bin/homebridge_harmony /usr/local/bin/homebridge_harmony
+}
+
+## FUNZIONE LOG ##
+function crea_log {
+echo "Creo i log $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
+sudo echo "
+
+if \$programname == 'homebridge_casina' then /var/log/homebridge/homebridge_casina.log
+if \$programname == 'homebridge_casina' then stop
+
+
+if \$programname == 'homebridge_lgtv' then /var/log/homebridge/homebridge_lgtv.log
+if \$programname == 'homebridge_lgtv' then stop
+
+if \$programname == 'homebridge_harmony' then /var/log/homebridge/homebridge_harmony.log
+if \$programname == 'homebridge_harmony' then stop
+
+if \$programname == 'homebridge_security' then /var/log/homebridge/homebridge_security.log
+if \$programname == 'homebridge_security' then stop     " >> /etc/rsyslog.d/50-default.conf
+}
+
+## FUNZIONE FINE SCRIPT ##
+function fine_script {
+echo "Fine Script: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
+}
+
 #inizio_script
 #check_utente
 #installa_nodejs
@@ -609,4 +643,7 @@ sudo sed -i 's/homebridge/homebridge_harmony/g' /usr/local/lib/node_modules/home
 #conf_demone_harmony
 #conf_demone_lvtg
 #crea_binari
-sed_binari
+#sed_binari
+#crea_link
+#crea_log
+fine_script
