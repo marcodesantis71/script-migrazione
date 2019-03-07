@@ -29,13 +29,27 @@ echo "Installo plugin Foscam $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_hb_u
 sudo npm install -g --unsafe-perm homebridge-foscamcamera
 if [[ $? != 0 ]] ;
 then
-        echo "Homebridge in errore. Riprovo" >> /home/thegod/04_hb_utente.log
+        echo "Foscam Plugin in errore. Riprovo" >> /home/thegod/04_hb_utente.log
         sudo npm install -g --unsafe-perm homebridge-foscamcamera
 else
-        echo "Homebrdige Installato correttamente" >> /home/thegod/04_hb_utente.log
+        echo "Foscam Plugin Installato correttamente" >> /home/thegod/04_hb_utente.log
+fi
+}
+
+## FUNZIONE INSTALLAZIONE PLUGIN WEBOS ##
+function installa_webos {
+echo "Installo plugin webos $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_hb_utente.log
+sudo npm install -g --unsafe-perm homebridge-webos-tv
+if [[ $? != 0 ]] ;
+then
+        echo "WebOS Plugin in errore. Riprovo" >> /home/thegod/04_hb_utente.log
+        sudo npm install -g --unsafe-perm homebridge-webos-tv
+else
+        echo "WebOS Plugin Installato correttamente" >> /home/thegod/04_hb_utente.log
 fi
 }
 
 #inizio_script
 #check_utente
-installa_foscam
+#installa_foscam
+installa_webos
