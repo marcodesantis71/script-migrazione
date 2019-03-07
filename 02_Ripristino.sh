@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # script finali per la migrazione da Ubuntu 16 a Ubuntu 18
-# Primo script da eseguire
+# Secondo script da eseguire
 # Lo script effettua:
 # 1) Check data
 # 2) Recupero BCK
