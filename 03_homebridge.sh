@@ -12,6 +12,7 @@
 # 7) Ripristino Key File LG
 # 8) Creazione File config.json
 # 9) Creazione file di init
+# 10) Crea file di configurazione del demone
 
 ## EXPORT VARIABILI ##
 data="06_03_2019_1000"
@@ -517,6 +518,53 @@ echo "Sistemo i permessi $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebrid
 chmod 644 /etc/systemd/system/homebridge_*
 }
 
+## FUNZIONE CONF DEMONE CASINA ##
+function conf_demone_casina {
+echo "Creo i file di configurazione per l'istanza CASINA $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
+sudo echo "# Defaults / Configuration options for homebridge
+# The following settings tells homebridge where to find the config.json file and where to persist the data (i.e. pairing and others)
+HOMEBRIDGE_OPTS=-D -I -U /home/thegod/.homebridge_casina/
+
+# If you uncomment the following line, homebridge will log more
+# You can display this via systemd's journalctl: journalctl -f -u homebridge
+# DEBUG=*" > /etc/default/homebridge_casina
+}
+
+## FUNZIONE CONF DEMONE SECURITY ##
+function conf_demone_security {
+echo "Creo i file di configurazione per l'istanza SECURITY $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
+sudo echo "# Defaults / Configuration options for homebridge
+# The following settings tells homebridge where to find the config.json file and where to persist the data (i.e. pairing and others)
+HOMEBRIDGE_OPTS=-D -I -U /home/thegod/.homebridge_security/
+
+# If you uncomment the following line, homebridge will log more
+# You can display this via systemd's journalctl: journalctl -f -u homebridge
+# DEBUG=*" > /etc/default/homebridge_security
+}
+
+## FUNZIONE CONF DEMONE HARMONY ##
+function conf_demone_harmony {
+echo "Creo i file di configurazione per l'istanza HARMONY $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
+sudo echo "# Defaults / Configuration options for homebridge
+# The following settings tells homebridge where to find the config.json file and where to persist the data (i.e. pairing and others)
+HOMEBRIDGE_OPTS=-D -I -U /home/thegod/.homebridge_harmony/
+
+# If you uncomment the following line, homebridge will log more
+# You can display this via systemd's journalctl: journalctl -f -u homebridge
+# DEBUG=*" > /etc/default/homebridge_harmony
+}
+
+## FUNZIONE CONF DEMONE LGTV ##
+function conf_demone_lvtg {
+echo "Creo i file di configurazione per l'istanza LGTV $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
+sudo echo "# Defaults / Configuration options for homebridge
+# The following settings tells homebridge where to find the config.json file and where to persist the data (i.e. pairing and others)
+HOMEBRIDGE_OPTS=-D -I -U /home/thegod/.homebridge_lgtv/
+
+# If you uncomment the following line, homebridge will log more
+# You can display this via systemd's journalctl: journalctl -f -u homebridge
+# DEBUG=*" > /etc/default/homebridge_lgtv
+}
 #inizio_script
 #check_utente
 #installa_nodejs
@@ -535,4 +583,8 @@ chmod 644 /etc/systemd/system/homebridge_*
 #init_security
 #init_harmony
 #init_lgvt
-permessi_init
+#permessi_init
+conf_demone_casina
+conf_demone_security
+conf_demone_harmony
+conf_demone_lvtg
