@@ -10,6 +10,8 @@
 # 5) Installazione Apache
 # 6) Installazione MySQL e Ripristino DB
 # 7) Installazione LetsEncrypt e Ripristino Certificati
+# 8) Ripristino Apache2
+# 9) Ripristino Contenuti Statici
 #
 # Script creato da Marco de Santis
 
@@ -260,6 +262,21 @@ mkdir /var/log/apache2/www.venditasvapo.com/
 mkdir /var/log/apache2/www.notiziarionews.it/
 mkdir /var/log/apache2/www.grafana.it/
 }
+
+## FUNZIONE RIPRISTINO CONTENUTI STATICI ##
+function ripristino_contenuti_statici {
+echo "Ripristino i contenuti statici di apache $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+gzip -d WebServer_*_${data}.tar.gz
+for i in $(ls WebServer_*_${data}*.tar); do tar -xvf $i; done
+mv var/www/* /var/www/
+}
+
+## FUNZIONE RESTART APACHE2 ##
+function restart_apache_conf {
+echo "Riavvio apache $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+systemctl restart apache2
+}
+
 #inizio_script
 #check_utente
 #check_data
@@ -282,6 +299,8 @@ mkdir /var/log/apache2/www.grafana.it/
 #ripristino_db
 #installo_certbot
 #ripristino_certificati
-ripristino_apache2
+#ripristino_apache2
 #disattiva_moduli
 #log_apache
+ripristino_contenuti_statici
+#restart_apache_conf
