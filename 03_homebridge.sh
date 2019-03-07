@@ -13,6 +13,7 @@
 # 8) Creazione File config.json
 # 9) Creazione file di init
 # 10) Crea file di configurazione del demone
+# 11) Creazione nuovi binari e relativa modifica
 
 ## EXPORT VARIABILI ##
 data="06_03_2019_1000"
@@ -565,6 +566,25 @@ HOMEBRIDGE_OPTS=-D -I -U /home/thegod/.homebridge_lgtv/
 # You can display this via systemd's journalctl: journalctl -f -u homebridge
 # DEBUG=*" > /etc/default/homebridge_lgtv
 }
+
+## FUNZIONE NUOVI BINARI ##
+function crea_binari {
+echo "Creo i nuovi binari $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
+sudo cp /usr/local/lib/node_modules/homebridge/bin/homebridge /usr/local/lib/node_modules/homebridge/bin/homebridge_casina
+sudo cp /usr/local/lib/node_modules/homebridge/bin/homebridge /usr/local/lib/node_modules/homebridge/bin/homebridge_lgtv
+sudo cp /usr/local/lib/node_modules/homebridge/bin/homebridge /usr/local/lib/node_modules/homebridge/bin/homebridge_security
+sudo cp /usr/local/lib/node_modules/homebridge/bin/homebridge /usr/local/lib/node_modules/homebridge/bin/homebridge_harmony
+}
+
+## FUNZIONE SED BINARI ISTANZE ##
+function sed_binari {
+echo "Sistemo i nuovi binari $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
+sudo sed -i 's/homebridge/homebridge_casina/g' /usr/local/lib/node_modules/homebridge/bin/homebridge_casina
+sudo sed -i 's/homebridge/homebridge_lgtv/g' /usr/local/lib/node_modules/homebridge/bin/homebridge_lgtv
+sudo sed -i 's/homebridge/homebridge_security/g' /usr/local/lib/node_modules/homebridge/bin/homebridge_security
+sudo sed -i 's/homebridge/homebridge_harmony/g' /usr/local/lib/node_modules/homebridge/bin/homebridge_harmony
+}
+
 #inizio_script
 #check_utente
 #installa_nodejs
@@ -584,7 +604,9 @@ HOMEBRIDGE_OPTS=-D -I -U /home/thegod/.homebridge_lgtv/
 #init_harmony
 #init_lgvt
 #permessi_init
-conf_demone_casina
-conf_demone_security
-conf_demone_harmony
-conf_demone_lvtg
+#conf_demone_casina
+#conf_demone_security
+#conf_demone_harmony
+#conf_demone_lvtg
+#crea_binari
+sed_binari
