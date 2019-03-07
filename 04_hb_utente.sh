@@ -30,7 +30,7 @@ sudo npm install -g --unsafe-perm homebridge-foscamcamera
 if [[ $? != 0 ]] ;
 then
         echo "Foscam Plugin in errore. Riprovo" >> /home/thegod/04_hb_utente.log
-        sudo npm install -g --unsafe-perm homebridge-foscamcamera
+        installa_foscam
 else
         echo "Foscam Plugin Installato correttamente" >> /home/thegod/04_hb_utente.log
 fi
@@ -43,7 +43,7 @@ sudo npm install -g --unsafe-perm homebridge-webos-tv
 if [[ $? != 0 ]] ;
 then
         echo "WebOS Plugin in errore. Riprovo" >> /home/thegod/04_hb_utente.log
-        sudo npm install -g --unsafe-perm homebridge-webos-tv
+        installa_webos
 else
         echo "WebOS Plugin Installato correttamente" >> /home/thegod/04_hb_utente.log
 fi
@@ -56,7 +56,7 @@ sudo npm install -g --unsafe-perm homebridge-eveatmo
 if [[ $? != 0 ]] ;
 then
         echo "Netatmo Plugin in errore. Riprovo" >> /home/thegod/04_hb_utente.log
-        sudo npm install -g --unsafe-perm homebridge-eveatmo
+        installa_netatmo
 else
         echo "Netatmo Plugin Installato correttamente" >> /home/thegod/04_hb_utente.log
 fi
@@ -69,9 +69,22 @@ sudo npm install -g --unsafe-perm homebridge-broadlink-rm
 if [[ $? != 0 ]] ;
 then
         echo "Broadlink Plugin in errore. Riprovo" >> /home/thegod/04_hb_utente.log
-        sudo npm install -g --unsafe-perm homebridge-broadlink-rm
+        installa_broadlink 
 else
         echo "Broadlink Plugin Installato correttamente" >> /home/thegod/04_hb_utente.log
+fi
+}
+
+## FUNZIONE INSTALLAZIONE PLUGIN ALEXA ##
+function installa_alexa {
+echo "Installo plugin alexa $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_hb_utente.log
+sudo npm install -g --unsafe-perm homebridge-alexa
+if [[ $? != 0 ]] ;
+then
+        echo "Alexa Plugin in errore. Riprovo" >> /home/thegod/04_hb_utente.log
+        installa_alexa
+else
+        echo "Alexa Plugin Installato correttamente" >> /home/thegod/04_hb_utente.log
 fi
 }
 
@@ -80,4 +93,5 @@ fi
 #installa_foscam
 #installa_webos
 #installa_netatmo
-installa_broadlink
+#installa_broadlink
+installa_alexa
