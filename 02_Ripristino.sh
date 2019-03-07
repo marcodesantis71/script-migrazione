@@ -224,6 +224,42 @@ mv /home/thegod/etc/ssl/sistemiesistemi/ /etc/ssl/
 cp -R /home/thegod/etc/letsencrypt/* /etc/letsencrypt
 }
 
+## FUNZIONE RIPRISTINO CONFIGURAZIONE APACHE2 ##
+function ripristino_apache2 {
+echo "Ripristino apache $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+tar -xvf apache2_${data}.tar
+cp -R etc/apache2/* /etc/apache2/
+}
+
+## FUNZIONE DISATTIVAZIONE MODULI APACHE2 ##
+function disattiva_moduli {
+echo "Sistemo i moduli di apache $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+sed -i 's/^/#/' /etc/apache2/mods-enabled/php7.0.load
+sed -i 's/^/#/' /etc/apache2/mods-enabled/fcgid.load
+}
+
+## FUNZIONE CARTELLE LOG APACHE2 ##
+function log_apache {
+echo "Creo le dir dei log di apache $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+mkdir /var/log/apache2/default/
+mkdir /var/log/apache2/www.sistemiesistemi.it/
+mkdir /var/log/apache2/imap.sistemiesistemi.it/
+mkdir /var/log/apache2/vpn.sistemiesistemi.it/
+mkdir /var/log/apache2/webmail.sistemiesistemi.it/
+mkdir /var/log/apache2/cam-server.sistemiesistemi.it/
+mkdir /var/log/apache2/bck-server.sistemiesistemi.it/
+mkdir /var/log/apache2/www.linux-guide.it/
+mkdir /var/log/apache2/webmail.linux-guide.it/
+mkdir /var/log/apache2/www.ilsistemistafolle.it/
+mkdir /var/log/apache2/www.dituttoedipiu.eu/
+mkdir /var/log/apache2/www.svapolandia.it/
+mkdir /var/log/apache2/www.svapovendita.it/
+mkdir /var/log/apache2/www.svapovendita.com/
+mkdir /var/log/apache2/www.venditasvapo.it/
+mkdir /var/log/apache2/www.venditasvapo.com/
+mkdir /var/log/apache2/www.notiziarionews.it/
+mkdir /var/log/apache2/www.grafana.it/
+}
 #inizio_script
 #check_utente
 #check_data
@@ -239,10 +275,13 @@ cp -R /home/thegod/etc/letsencrypt/* /etc/letsencrypt
 #install_apache2
 #abilita_moduli
 #restart_apache2
-install_mysql
+#install_mysql
 #security_mysql
 #crea_cnf
 #crea_db
 #ripristino_db
-installo_certbot
+#installo_certbot
 #ripristino_certificati
+ripristino_apache2
+#disattiva_moduli
+#log_apache
