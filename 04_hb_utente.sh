@@ -1,9 +1,12 @@
 #!/bin/bash
-
 # script finali per la migrazione da Ubuntu 16 a Ubuntu 18
 # Quarto script da eseguire
 # Lo script effettua:
 # 1) Check utente
+# 2) Installazione plugin (con retry in caso di errore)
+# 3) Riavvio
+#
+# Script creato da Marco de Santis
 
 ## EXPORT VARIABILI ##
 data="06_03_2019_1000"
@@ -88,10 +91,75 @@ else
 fi
 }
 
-#inizio_script
-#check_utente
-#installa_foscam
-#installa_webos
-#installa_netatmo
-#installa_broadlink
+## FUNZIONE INSTALLAZIONE PLUGIN IFTTT ##
+function installa_ifttt {
+echo "Installo plugin ifttt $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_hb_utente.log
+sudo npm install -g --unsafe-perm homebridge-ifttt
+if [[ $? != 0 ]] ;
+then
+        echo "IFTTT Plugin in errore. Riprovo" >> /home/thegod/04_hb_utente.log
+        installa_ifttt
+else
+        echo "IFTTT Plugin Installato correttamente" >> /home/thegod/04_hb_utente.log
+fi
+}
+
+## FUNZIONE INSTALLAZIONE PLUGIN HARMONY ##
+function installa_harmony {
+echo "Installo plugin harmony $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_hb_utente.log
+sudo npm install -g --unsafe-perm homebridge-harmonyhub-plugin
+if [[ $? != 0 ]] ;
+then
+        echo "Harmony Plugin in errore. Riprovo" >> /home/thegod/04_hb_utente.log
+        installa_harmony
+else
+        echo "Harmony Plugin Installato correttamente" >> /home/thegod/04_hb_utente.log
+fi
+}
+
+## FUNZIONE REPAIR PERMESSI ##
+function check_permessi {
+echo "Sistemo i permessi $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_hb_utente.log
+sudo chown -R thegod:thegod /home/thegod/.config
+}
+
+## FUNZIONE RIAVVIO SERVIZI ##
+function riavvio_servizi {
+echo "Riavvio i servizi e li abilito al boot $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_hb_utente.log
+sudo systemctl restart rsyslog
+sudo systemctl restart homebridge_casina
+sudo systemctl restart homebridge_lgtv
+sudo systemctl restart homebridge_security
+sudo systemctl restart homebridge_harmony
+sudo systemctl enable homebridge_casina
+sudo systemctl enable homebridge_lgtv
+sudo systemctl enable homebridge_security
+sudo systemctl enable homebridge_harmony
+}
+
+## FUNZIONE RIMOZIONE BCK ##
+function rimuovi_bck {
+echo "Rimuovo i file di backup $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_hb_utente.log
+sudo  rm -rf *.tar
+sudo rm -rf *.sql
+sudo rm -rf home var etc
+}
+
+## FUNZIONE FINE SCRIPT ##
+function fine_script {
+echo "Fine Script: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_hb_utente.log
+}
+
+inizio_script
+check_utente
+installa_foscam
+installa_webos
+installa_netatmo
+installa_broadlink
 installa_alexa
+installa_ifttt
+installa_harmony
+check_permessi
+riavvio_servizi
+rimuovi_bck
+fine_script
