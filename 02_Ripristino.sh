@@ -7,10 +7,7 @@
 # 2) Recupero BCK
 # 3) Installazione e Ripristino DHCP Server
 # 4) Installazione e Ripristino DNS Server
-# 5) Modifica configurazione rete, file hosts e hostname
-# 6) Update sistema
-# 7) Rimozione Firewall
-# 8) Sync orario
+# 5) Installazione Apache
 #
 # Script creato da Marco de Santis
 
@@ -124,6 +121,28 @@ echo "RIAVVIO DNS $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
 netplan apply
 systemctl restart bind9
 }
+
+## FUNZIONE INSTALLAZIONE APACHE2 ##
+function install_apache2 {
+echo "INSTALLO APACHE $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+apt-get install apache2 php libapache2-mod-php php-mysql -y
+}
+
+## FUNZIONE ABILITAZIONE MODULI ##
+function abilita_moduli {
+echo "ABILITO MODULI $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+a2enmod rewrite
+a2enmod ssl
+a2enmod proxy
+}
+
+## FUNZIONE RIAVVIO APACHE2 ##
+function restart_apache2 {
+echo "RIAVVIO APACHE2 $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+systemctl restart apache2
+}
+
+
 #inizio_script
 #check_utente
 #check_data
@@ -136,3 +155,6 @@ systemctl restart bind9
 #ripristino_dns
 #modifica_dns
 #restart_dns
+install_apache2
+#abilita_moduli
+#restart_apache2
