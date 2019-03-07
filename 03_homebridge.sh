@@ -36,16 +36,16 @@ if [ "$(whoami)" != "root" ]; then
 fi
 }
 
-## FUNZIONE INSTALLAZIONE NODEJS ##
-function installa_nodejs {
-echo "Installo nodejs $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
-sudo apt-get install nodejs -y
+## FUNZIONE INSTALLAZIONE REPO ##
+function installa_repo {
+echo "Installo repository per ultima versione nodejs $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
+curl -sL https://deb.nodesource.com/setup_8.x | sudo bash -
 }
 
-## FUNZIONE INSTALLAZIONE NPM ##
-function installa_npm {
-echo "Installo npm $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
-sudo apt-get install npm -y
+## FUNZIONE INSTALLAZIONE NODE E NPM ##
+function installa_node_npm {
+echo "Installo node e npm $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
+sudo apt-get install nodejs -y
 }
 
 ## FUNZIONE PREREQUISITI ##
@@ -623,8 +623,8 @@ echo "Fine Script: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
 
 inizio_script
 check_utente
-installa_nodejs
-installa_npm
+installa_repo
+installa_node_npm
 installa_pre
 installa_homebridge
 crea_cartelle
