@@ -347,7 +347,7 @@ echo "{
       \"inputs\":[
           {
             \"appId\": \"com.webos.app.livetv\",
-            \"name\": \"TV\"
+            \"name\": \"Live TV\"
           },
           {
             \"appId\": \"com.webos.app.hdmi1\",
