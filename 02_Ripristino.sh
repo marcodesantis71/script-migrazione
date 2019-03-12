@@ -13,7 +13,8 @@
 # 8) Ripristino Apache2
 # 9) Ripristino Contenuti Statici
 # 10) Installazione Mail e Ripristino da Backup
-# 11) Riavvio Servizi
+# 11) Transmission-bit
+# 12) Riavvio Servizi
 #
 # Script creato da Marco de Santis
 
@@ -355,6 +356,46 @@ chown thegod:thegod /home/thegod/.muttrc
 echo "set copy=no" > /root/.muttrc
 }
 
+function add_repo_trasmission {
+	echo "Aggiungo repo per transmissionbit $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+	add-apt-repository ppa:transmissionbt/ppa -y
+}
+
+function install_transmission {
+	echo "Installo transmissionbit $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+	apt-get install transmission-cli transmission-common transmission-daemon -y
+}
+
+function crea_cartelle_transmission {
+	echo "Creo cartelle per transmissionbit $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+	mkdir -p /srv/Multimedia/Completi
+	mkdir -p /srv/Multimedia/Incompleti
+}
+
+function sistema_permessi_transmission {
+	echo "Sistemo permessi cartelle per transmissionbit $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+        chgrp -R debian-transmission /srv
+        chmod -R 775 /srv
+}
+
+function modifica_conf_transmission {
+	echo "Sistemo setting.json per transmissionbit $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+        sed -i '/}/d' /etc/transmission-daemon/settings.json
+        sed -i '/utp-enabled/d' /etc/transmission-daemon/settings.json
+        echo "    \"utp-enabled\": true," >> /etc/transmission-daemon/settings.json
+        sed -i '/download-dir/d' /etc/transmission-daemon/settings.json
+        echo "    \"download-dir\": \"/srv/Multimedia/Completi\"," >> /etc/transmission-daemon/settings.json
+        sed -i '/incomplete-dir/d' /etc/transmission-daemon/settings.json
+        echo "    \"incomplete-dir\": \"/srv/Multimedia/Incompleti\"," >> /etc/transmission-daemon/settings.json
+        sed -i '/rpc-password/d' /etc/transmission-daemon/settings.json
+        echo "    \"rpc-password\": \"M4rc03S4r4\"," >> /etc/transmission-daemon/settings.json
+        sed -i '/rpc-username/d' /etc/transmission-daemon/settings.json
+        echo "    \"rpc-username\": \"marco1\"," >> /etc/transmission-daemon/settings.json
+        sed -i '/rpc-whitelist/d' /etc/transmission-daemon/settings.json
+        echo "    \"rpc-whitelist\": \"127.0.0.1, 192.168.8.*, 10.8.0.*\"" >> /etc/transmission-daemon/settings.json
+        echo "}" >> /etc/transmission-daemon/settings.json
+}
+
 ## FUNZIONE RIAVVIO SERVIZI ##
 function riavvio_servizi {
 echo "Riavvio e abilito tutti i servizi al boot $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
@@ -364,12 +405,14 @@ systemctl restart apache2
 systemctl restart postfix
 systemctl restart dovecot
 systemctl restart spamassassin
+systemctl restart transmission-daemon.service
 systemctl enable isc-dhcp-server
 systemctl enable bind9
 systemctl enable apache2
 systemctl enable postfix
 systemctl enable dovecot
 systemctl enable spamassassin
+systemctl enable transmission-daemon.service
 echo "Fine Script: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
 }
 
@@ -410,4 +453,9 @@ crea_dh
 abilita_dh
 installa_mutt
 configura_mutt
+add_repo_trasmission
+install_transmission
+crea_cartelle_transmission
+sistema_permessi_transmission
+modifica_conf_transmission
 riavvio_servizi
