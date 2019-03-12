@@ -15,7 +15,8 @@
 # 10) Installazione Mail e Ripristino da Backup
 # 11) Transmission-bit
 # 12) Samba Server
-# 13) Riavvio Servizi
+# 13) Influx, Telegraf, Grafana
+# 14) Riavvio Servizi
 #
 # Script creato da Marco de Santis
 
@@ -61,6 +62,7 @@ function recupero_bck {
 echo "RECUPERO BCK $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
 scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_servizi}/dhcp/dhcp_${data}.tar /home/thegod/
 scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_servizi}/bind/bind_${data}.tar /home/thegod/
+scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_servizi}/telegraf/telegraf_${data}.tar /home/thegod/
 scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_mysql}/*_${data}.sql /home/thegod/
 scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_certificati}/*_${data}.tar /home/thegod/
 scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_servizi}/apache2/apache2_${data}.tar /home/thegod/
@@ -683,6 +685,41 @@ function creo_utenti_samba {
 	smbpasswd -e marco
 }
 	
+function installa_influxdb {
+	echo "Installo influxdb $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+	sudo curl -sL https://repos.influxdata.com/influxdb.key | sudo apt-key add -
+	source /etc/lsb-release
+	echo "deb https://repos.influxdata.com/${DISTRIB_ID,,} ${DISTRIB_CODENAME} stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
+	apt-get update
+	apt-get install influxdb -y
+	systemctl restart influxd
+}
+
+function crea_db_influx {
+	echo "Creo DB Influx $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+	influx -precision rfc3339 -execute 'create database "telegraf"';
+	influx -precision rfc3339 -execute "create user telegraf with password '\$M4cB00kR3t1n4\$'";
+}
+
+function install_telegraf {
+	echo "Installo telgraf $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+	apt-get install telegraf -y
+}
+
+## FUNZIONE RIPRISTINO BCK TELEGRAF ##
+function ripristino_telegraf {
+echo "RIPRISTINO TELEGRAF $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+tar -xvf telegraf_${data}.tar
+cp /home/thegod/etc/telegraf/telegraf.conf /etc/telegraf
+}
+
+function install_grafana {
+	echo "Installo grafana $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+	curl https://packages.grafana.com/gpg.key | sudo apt-key add -
+	echo "deb https://packages.grafana.com/oss/deb stable main" | sudo tee /etc/apt/sources.list.d/grafana.list
+	apt-get update
+	apt install grafana -y
+}
 
 ## FUNZIONE RIAVVIO SERVIZI ##
 function riavvio_servizi {
@@ -695,6 +732,9 @@ systemctl restart dovecot
 systemctl restart spamassassin
 systemctl restart transmission-daemon.service
 systemctl restart nmbd
+systemctl restart influxd
+systemctl restart telegraf
+systemctl restart grafana-server
 systemctl enable isc-dhcp-server
 systemctl enable bind9
 systemctl enable apache2
@@ -703,6 +743,9 @@ systemctl enable dovecot
 systemctl enable spamassassin
 systemctl enable transmission-daemon.service
 systemctl enable nmbd
+systemctl enable influxd
+systemctl enable telegraf
+systemctl enable grafana-server
 echo "Fine Script: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
 }
 
@@ -751,4 +794,9 @@ modifica_conf_transmission
 installa_samba
 configurazione_samba
 creo_utenti_samba
+installa_influxdb
+crea_db_influx
+install_telegraf
+ripristino_telegraf
+install_grafana
 riavvio_servizi
