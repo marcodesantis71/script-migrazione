@@ -107,7 +107,7 @@ fi
 ## FUNZIONE INSTALLAZIONE PLUGIN HARMONY ##
 function installa_harmony {
 echo "Installo plugin harmony $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_hb_utente.log
-sudo npm install -g --unsafe-perm homebridge-harmonyhub-plugin
+sudo npm install -g --unsafe-perm homebridge-harmony
 if [[ $? != 0 ]] ;
 then
         echo "Harmony Plugin in errore. Riprovo" >> /home/thegod/04_hb_utente.log

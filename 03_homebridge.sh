@@ -39,7 +39,7 @@ fi
 ## FUNZIONE INSTALLAZIONE REPO ##
 function installa_repo {
 echo "Installo repository per ultima versione nodejs $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
-curl -sL https://deb.nodesource.com/setup_8.x | sudo bash -
+curl -sL https://deb.nodesource.com/setup_11.x | sudo bash -
 }
 
 ## FUNZIONE INSTALLAZIONE NODE E NPM ##
@@ -395,11 +395,14 @@ echo "{
                 \"pin\": \"031-45-154\"
         },
         \"plugins\": [
-                \"homebridge-harmonyhub-plugin\"
+                \"homebridge-harmonyhub\"
         ],
         \"platforms\": [{
-                \"platform\": \"HarmonyHub\",
-                \"name\": \"homebridge-harmonyhub-plugin\"
+        \"platform\": \"HarmonyHubWebSocket\",
+    \"name\": \"Harmony_Hub\",
+    \"hubIP\": \"192.168.123.66\",
+    \"TVPlatformMode\" : true,
+    \"mainActivity\" : \"LA TV\"
         }]
 }" > /home/thegod/.homebridge_harmony/config.json
 }
