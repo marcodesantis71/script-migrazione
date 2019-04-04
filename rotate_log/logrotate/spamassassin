@@ -1,0 +1,12 @@
+/home/spamd/spamd.log {
+    daily
+    missingok
+    rotate 7
+    compress
+    notifempty
+    create 0640 root root
+    sharedscripts
+    postrotate
+        systemctl restart spamassassin
+    endscript
+}
