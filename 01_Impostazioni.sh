@@ -381,8 +381,8 @@ profile_user
 profile_root
 repair_profile
 file_hosts
-change_hostname
 ubuntu_update
+change_hostname
 check_ufw
 sync_orario
 repair_eth0
