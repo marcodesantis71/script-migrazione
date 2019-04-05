@@ -10,12 +10,12 @@
 
 ## FUNZIONE INZIO SCRIPT ##
 function inizio_script {
-echo "Inizio Script: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/05_ripristino_script.log
+echo "Inizio Script: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
 }
 
 ## FUNZIONE CHECK UTENTE ##
 function check_utente {
-echo "Controllo l'utente $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/05_ripristino_script.log
+echo "Controllo l'utente $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
 
 if [ "$(whoami)" != "root" ]; then
         echo "Lo script va lanciato con utente root"
@@ -25,13 +25,13 @@ fi
 
 ## FUNZIONE CREA CARTELLA ##
 function crea_cartella {
-echo "Creo la cartella $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/05_ripristino_script.log
+echo "Creo la cartella $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
 mkdir /root/Script
 }
 
 ## FUNZIONE RINNOVO CERTIFICATI ##
 function ripristino_rinnovo_certificati {
-echo "Ripristino rinnovo certificati: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/05_ripristino_script.log
+echo "Ripristino rinnovo certificati: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
 echo "#!/bin/bash
 #set -x
 #
@@ -139,7 +139,7 @@ InviaReportMail
 
 ## RIPRISTINO BCK ##
 function ripristino_bck {
-echo "Ripristino script bck: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/05_ripristino_script.log
+echo "Ripristino script bck: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
 echo "#!/bin/bash
 set -x
 
@@ -374,7 +374,7 @@ esac
 
 ## FUNZIONE RIPRISTINO PULIZIA VIDEO ##
 function ripristino_pulizia_video {
-echo "Ripristino pulizia videosorveglianza $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/05_ripristino_script.log
+echo "Ripristino pulizia videosorveglianza $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
 echo "#/bin/bash
 set -x
 source ~/.bashrc
@@ -456,7 +456,7 @@ esac " > /home/thegod/Script/Pulizia_VideoSorveglianza.sh
 ## FUNZIONE RIPRISTINO CLEAN MEMORY ##
 
 function clen_memory {
-echo "Ripristino script clean memory $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/05_ripristino_script.log
+echo "Ripristino script clean memory $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
 echo "#!/bin/bash
 
 set -x
@@ -468,7 +468,7 @@ sync; echo 2 > /proc/sys/vm/drop_caches" > /root/Script/clean_memory.sh
 ## FUNZIONE RIPRISTINO PULIZIA BCK ##
 
 function ripristino_bck {
-echo "Ripristino script pulizia bck $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/05_ripristino_script.log
+echo "Ripristino script pulizia bck $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
 echo "#!/bin/bash
 
 set -x
@@ -480,7 +480,7 @@ ssh -oStrictHostKeyChecking=no  admin@backup-server.sistemiesistemi.it "find /sh
 ## FUNZIONE RIPRISTINO PERMESSI ##
 
 function repair_perm {
-echo "Riparo permessi $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/05_ripristino_script.log
+echo "Riparo permessi $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
 chmod u+x /root/Script/bck.sh
 chmod u+x /root/Script/pulizia.sh
 chmod u+x /root/Script/clean_memory.sh
@@ -492,12 +492,17 @@ chmod u+x /home/thegod/Script/Pulizia_VideoSorveglianza.sh
 
 ## FUNZIONE RIPRISTINO CRONTAB ##
 function ripristino_crontab {
-echo "RIPRISTINO CRONTAB $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+echo "RIPRISTINO CRONTAB $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
 echo "00 01 * * * /home/thegod/Script/Pulizia_VideoSorveglianza.sh pulisci >/dev/null 2>&1" | tee -a /var/spool/cron/crontabs/thegod
 echo "00 10 * * * /root/Script/bck.sh full > /dev/null 2>&1" | tee -a /var/spool/cron/crontabs/root
 echo "00 05 * * * /root/Script/pulizia.sh > /dev/null 2>&1" | tee -a /var/spool/cron/crontabs/root
 echo "00 * * * * /root/Script/clean_memory.sh > /dev/null 2>&1" | tee -a /var/spool/cron/crontabs/root
 echo "30 10 * * * /root/Script/rinnovo_certificati.sh renew > /var/log/certbot.log" | tee -a /var/spool/cron/crontabs/root
+}
+
+## FUNZIONE FINE SCRIPT ##
+function fine_script {
+echo "Fine Script: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/Migrazione/Logs/04_ripristino_script.log
 }
 
 inizio_script
@@ -510,3 +515,4 @@ clen_memory
 ripristino_bck
 ripristino_crontab
 repair_perm
+fine_script
