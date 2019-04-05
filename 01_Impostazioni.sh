@@ -204,6 +204,7 @@ PS1='\h:\W \u\\$ '
 
 
 export PASS='\$M4cB00kR3t1n4\$'
+export EDITOR=vi
 alias NPM_INSTALL='echo \$PASS | sudo -S npm install -g --unsafe-perm'
 alias NPM_UPDATE='echo \$PASS | sudo -S npm -g outdated'
 alias ll='ls -lrt'
@@ -264,6 +265,7 @@ fi
 PS1='\h:\W \u\\$ '
 
 set -o vi
+export EDITOR=vi
 alias ll='ls -lrt'
 alias mroe='more'
 alias clera='clear'

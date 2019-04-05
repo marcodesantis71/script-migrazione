@@ -486,6 +486,7 @@ chmod u+x /root/Script/pulizia.sh
 chmod u+x /root/Script/clean_memory.sh
 chmod u+x /root/Script/rinnovo_certificati.sh
 chown -R thegod:thegod /home/thegod/Script
+chown thegod:crontab /var/spool/cron/crontabs/thegod
 chmod u+x /home/thegod/Script/Pulizia_VideoSorveglianza.sh
 }
 
@@ -507,5 +508,5 @@ ripristino_bck
 ripristino_pulizia_video
 clen_memory
 ripristino_bck
-repair_perm
 ripristino_crontab
+repair_perm
