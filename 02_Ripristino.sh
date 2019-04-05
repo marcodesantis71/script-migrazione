@@ -395,9 +395,9 @@ function modifica_conf_transmission {
         sed -i '/rpc-password/d' /etc/transmission-daemon/settings.json
         echo "    \"rpc-password\": \"M4rc03S4r4\"," >> /etc/transmission-daemon/settings.json
         sed -i '/rpc-username/d' /etc/transmission-daemon/settings.json
-        echo "    \"rpc-username\": \"marco1\"," >> /etc/transmission-daemon/settings.json
+        echo "    \"rpc-username\": \"marco\"," >> /etc/transmission-daemon/settings.json
         sed -i '/rpc-whitelist/d' /etc/transmission-daemon/settings.json
-        echo "    \"rpc-whitelist\": \"127.0.0.1, 192.168.8.*, 10.8.0.*\"" >> /etc/transmission-daemon/settings.json
+        echo "    \"rpc-whitelist\": \"127.0.0.1, 192.168.123.*, 10.8.0.*\"" >> /etc/transmission-daemon/settings.json
         echo "}" >> /etc/transmission-daemon/settings.json
 }
 
