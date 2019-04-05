@@ -46,6 +46,7 @@ curl -sL https://deb.nodesource.com/setup_11.x | sudo bash -
 function installa_node_npm {
 echo "Installo node e npm $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
 sudo apt-get install nodejs -y
+npm install -g --unsafe-perm npm
 }
 
 ## FUNZIONE PREREQUISITI ##

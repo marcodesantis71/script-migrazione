@@ -270,7 +270,7 @@ tar -cvf \${SERVICE_DIR}/\${SERVIZIO}/\${SERVIZIO}_\${OGGI}.tar /etc/\$SERVIZIO/
 done;
 }
 function BackupDB {
-for i in \$(mysql --login-path=root.db -S /var/run/mysqld/mysqld.sock -N -B -e \"show databases\" | egrep -v \"mysql|information|performance_schema|sys\") ; do
+for i in \$(mysql --login-path=/root/.mylogin.cnf -S /var/run/mysqld/mysqld.sock -N -B -e \"show databases\" | egrep -v \"mysql|information|performance_schema|sys\") ; do
 mysqldump -u root -p\\$M4cB00kR3t1n4\\$ \${i} > \${DIR_MYSQL}/\${i}_\${OGGI}.sql
 if [ \"\$?\" ==  0 ];
 then

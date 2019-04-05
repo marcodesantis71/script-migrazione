@@ -361,7 +361,9 @@ echo "set copy=no" > /root/.muttrc
 
 function add_repo_trasmission {
 	echo "Aggiungo repo per transmissionbit $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
-	add-apt-repository ppa:transmissionbt/ppa -y
+	echo "deb http://ppa.launchpad.net/transmissionbt/ppa/ubuntu bionic main
+deb-src http://ppa.launchpad.net/transmissionbt/ppa/ubuntu bionic main" > /etc/apt/sources.list.d/transmissionbt-ubuntu-ppa-cosmic.list
+	apt-get update
 }
 
 function install_transmission {
