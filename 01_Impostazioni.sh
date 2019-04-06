@@ -39,13 +39,13 @@ apt autoremove --purge snapd -y
 function resize_fs {
 echo "Sistemo lo spazio $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/01_Impostazioni.log
 vgdisplay
-echo "Dammi i giga:"
+echo "Dammi i Free PE:"
 read giga
 lvdisplay
 echo "Dammi il LV:"
 read lv
 
-lvextend -L+${giga}G ${lv}
+lvextend -l +${giga} ${lv}
 resize2fs ${lv}
 df -h / >> /home/thegod/01_Impostazioni.log
 
