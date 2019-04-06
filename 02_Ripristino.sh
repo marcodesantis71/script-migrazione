@@ -30,6 +30,7 @@ path_certificati="${path_nas}/CERTIFICATI/"
 path_homebridge="${path_nas}/HOMEBRIDGE/"
 path_mysql="${path_nas}/MYSQL"
 path_contenuti="${path_nas}/SITES/"
+path_scripts="${path_nas}/SCRIPTS/"
 path_mail="${path_nas}/MAIL"
 
 ## FUNZIONE INZIO SCRIPT ##
@@ -65,6 +66,7 @@ scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_servizi}/bind/bi
 scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_servizi}/telegraf/telegraf_${data}.tar /home/thegod/
 scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_mysql}/*_${data}.sql /home/thegod/
 scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_certificati}/*_${data}.tar /home/thegod/
+scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_scripts}/*_${data}.sh /home/thegod/
 scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_servizi}/apache2/apache2_${data}.tar /home/thegod/
 scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_contenuti}/WebServer_*_${data}.tar.gz /home/thegod/
 scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_servizi}/dovecot/dovecot_${data}.tar /home/thegod/
@@ -402,6 +404,11 @@ function modifica_conf_transmission {
 	killall -HUP transmission-daemon
 }
 
+function disabilita_ppa_transmission {
+	echo "rimuovo ppa transmission $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+	rm /etc/apt/sources.list.d/transmissionbt-ubuntu-ppa-cosmic.list
+}
+
 function installa_samba {
 	echo "Installo samba $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
 	apt-get  install samba -y
@@ -409,7 +416,7 @@ function installa_samba {
 
 function configurazione_samba {
 	echo "Configuro samba $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
-	mv smb.conf smb.conf_old
+	mv /etc/samba/smb.conf /etc/samba/smb.conf_old
 	echo "#
 # Sample configuration file for the Samba suite for Debian GNU/Linux.
 #
@@ -794,6 +801,7 @@ install_transmission
 crea_cartelle_transmission
 sistema_permessi_transmission
 modifica_conf_transmission
+disabilita_ppa_transmission
 installa_samba
 configurazione_samba
 creo_utenti_samba
