@@ -9,7 +9,7 @@
 # Script creato da Marco de Santis
 
 ## EXPORT VARIABILI ##
-data="06_03_2019_1000"
+data="04_04_2019_1000"
 
 ## FUNZIONE INZIO SCRIPT ##
 function inizio_script {

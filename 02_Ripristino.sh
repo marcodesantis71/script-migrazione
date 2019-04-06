@@ -21,7 +21,7 @@
 # Script creato da Marco de Santis
 
 ## EXPORT VARIABILI ##
-data="06_03_2019_1000"
+data=""
 ip_nas="192.168.123.8"
 user_nas="admin"
 path_nas="/share/CACHEDEV1_DATA/MASTER-BCK/"
@@ -385,20 +385,21 @@ function sistema_permessi_transmission {
 
 function modifica_conf_transmission {
 	echo "Sistemo setting.json per transmissionbit $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
-        sed -i '/}/d' /etc/transmission-daemon/settings.json
-        sed -i '/utp-enabled/d' /etc/transmission-daemon/settings.json
-        echo "    \"utp-enabled\": true," >> /etc/transmission-daemon/settings.json
-        sed -i '/download-dir/d' /etc/transmission-daemon/settings.json
-        echo "    \"download-dir\": \"/srv/Multimedia/Completi\"," >> /etc/transmission-daemon/settings.json
-        sed -i '/incomplete-dir/d' /etc/transmission-daemon/settings.json
-        echo "    \"incomplete-dir\": \"/srv/Multimedia/Incompleti\"," >> /etc/transmission-daemon/settings.json
-        sed -i '/rpc-password/d' /etc/transmission-daemon/settings.json
-        echo "    \"rpc-password\": \"M4rc03S4r4\"," >> /etc/transmission-daemon/settings.json
-        sed -i '/rpc-username/d' /etc/transmission-daemon/settings.json
-        echo "    \"rpc-username\": \"marco\"," >> /etc/transmission-daemon/settings.json
-        sed -i '/rpc-whitelist/d' /etc/transmission-daemon/settings.json
-        echo "    \"rpc-whitelist\": \"127.0.0.1, 192.168.123.*, 10.8.0.*\"" >> /etc/transmission-daemon/settings.json
-        echo "}" >> /etc/transmission-daemon/settings.json
+        sed -i '/}/d' /var/lib/transmission-daemon/info/settings.json
+        sed -i '/utp-enabled/d' /var/lib/transmission-daemon/info/settings.json
+        echo "    \"utp-enabled\": true," >> /var/lib/transmission-daemon/info/settings.json
+        sed -i '/download-dir/d' /var/lib/transmission-daemon/info/settings.json
+        echo "    \"download-dir\": \"/srv/Multimedia/Completi\"," >> /var/lib/transmission-daemon/info/settings.json
+        sed -i '/incomplete-dir/d' /var/lib/transmission-daemon/info/settings.json
+        echo "    \"incomplete-dir\": \"/srv/Multimedia/Incompleti\"," >> /var/lib/transmission-daemon/info/settings.json
+        sed -i '/rpc-password/d' /var/lib/transmission-daemon/info/settings.json
+        echo "    \"rpc-password\": \"M4rc03S4r4\"," >> /var/lib/transmission-daemon/info/settings.json
+        sed -i '/rpc-username/d' /var/lib/transmission-daemon/info/settings.json
+        echo "    \"rpc-username\": \"marco\"," >> /var/lib/transmission-daemon/info/settings.json
+        sed -i '/rpc-whitelist/d' /var/lib/transmission-daemon/info/settings.json
+        echo "    \"rpc-whitelist\": \"127.0.0.1, 192.168.123.*, 10.8.0.*\"" >> /var/lib/transmission-daemon/info/settings.json
+        echo "}" >> /var/lib/transmission-daemon/info/settings.json
+	killall -HUP transmission-daemon
 }
 
 function installa_samba {
