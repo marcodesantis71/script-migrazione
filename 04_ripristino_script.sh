@@ -8,6 +8,9 @@
 #
 # Script creato da Marco de Santis
 
+# EXPORT VARIABILI ##
+data=""
+
 ## FUNZIONE INZIO SCRIPT ##
 function inizio_script {
 echo "Inizio Script: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
@@ -23,6 +26,16 @@ if [ "$(whoami)" != "root" ]; then
 fi
 }
 
+## FUNZIONE CHECK DATA ##
+function check_data {
+echo "Verifico data $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+if [[ -z ${data} ]];
+then
+echo "Non hai inserito la data."
+exit
+fi
+}
+
 ## FUNZIONE CREA CARTELLA ##
 function crea_cartella {
 echo "Creo la cartella $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
@@ -33,12 +46,12 @@ mkdir /home/thegod/Script
 ## FUNZIONE RIPRISTINO SCRIPT ##
 function recupero_script {
 echo "Ripristino Script $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
-cp /home/thegod/bck_${data}.sh /root/Script/
-cp /home/thegod/pulizia_${data}.sh /root/Script/
-cp /home/thegod/clean_memory_${data}.sh /root/Script/
-cp /home/thegod/rinnovo_certificati_${data}.sh /root/Script/
-cp /home/thegod/rsync_${data}.sh /root/Script/
-cp /home/thegod/Pulizia_VideoSorveglianza_${data}.sh /home/thegod/Script/
+cp /home/thegod/bck_${data}.sh /root/Script/bck.sh
+cp /home/thegod/pulizia_${data}.sh /root/Script/pulizia.sh
+cp /home/thegod/clean_memory_${data}.sh /root/Script/clean_memory.sh
+cp /home/thegod/rinnovo_certificati_${data}.sh /root/Script/rinnovo_certificati.sh
+cp /home/thegod/rsync_${data}.sh /root/Script/rsync.sh
+cp /home/thegod/Pulizia_VideoSorveglianza_${data}.sh /home/thegod/Script/Pulizia_VideoSorveglianza.sh
 }
 
 ## FUNZIONE RIPRISTINO PERMESSI ##
@@ -73,6 +86,8 @@ echo "Fine Script: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/Migrazione/Logs/0
 }
 
 inizio_script
+check_utente
+check_data
 crea_cartella
 check_utente
 recupero_script
