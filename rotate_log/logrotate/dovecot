@@ -1,9 +1,0 @@
-/var/log/dovecot*.log {
-  missingok
-  notifempty
-  delaycompress
-  sharedscripts
-  postrotate
-    doveadm log reopen
-  endscript
-}
