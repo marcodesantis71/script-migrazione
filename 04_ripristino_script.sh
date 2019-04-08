@@ -80,6 +80,19 @@ echo "00 * * * * /root/Script/clean_memory.sh > /dev/null 2>&1" | tee -a /var/sp
 echo "30 10 * * * /root/Script/rinnovo_certificati.sh renew > /var/log/certbot.log" | tee -a /var/spool/cron/crontabs/root
 }
 
+## FUNZIONE RIPRISTINO ROTATE ##
+function ripristino_rotate {
+echo "RIPRISTINO CRONTAB $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
+cp /home/thegod/apache2_pers_${data} /etc/logrotate.d/
+cp /home/thegod/dovecot_${data} /etc/logrotate.d/
+cp /home/thegod/homebridge_{data} /etc/logrotate.d/
+cp /home/thegod/spamassassin_{data} /etc/logrotate.d/
+chmod 644 /etc/logrotate.d/apache2_pers
+chmod 644 /etc/logrotate.d/dovecot
+chmod 644 /etc/logrotate.d/homebridge
+chmod 644 /etc/logrotate.d/spamassassin
+}
+
 ## FUNZIONE FINE SCRIPT ##
 function fine_script {
 echo "Fine Script: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/Migrazione/Logs/04_ripristino_script.log
@@ -93,4 +106,5 @@ check_utente
 recupero_script
 ripristino_crontab
 repair_perm
+ripristino_rotate
 fine_script

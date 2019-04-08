@@ -403,7 +403,7 @@ echo "{
     \"name\": \"Harmony_Hub\",
     \"hubIP\": \"192.168.123.66\",
     \"TVPlatformMode\" : true,
-    \"mainActivity\" : \"VediTV\"
+    \"mainActivity\" : \"VediTV\",
     \"devicesToPublishAsAccessoriesSwitch\" : [\"SoundBar;VolumeUp\",\"SoundBar;VolumeDown\",\"SoundBar;Mute\",\"TV Leaving;ChannelUp\",\"TV Leaving;ChannelDown\",\"TV Leaving;Info\",\"TV Leaving;InputTv\",\"TV Leaving;Number1\",\"TV Leaving;Number2\",\"TV Leaving;Number3\",\"TV Leaving;Number4\",\"TV Leaving;Number5\",\"TV Leaving;Number6\",\"TV Leaving;Number7\",\"TV Leaving;Number8\",\"TV Leaving;Number9\",\"TV Leaving;Number0\"]
         }]
 }" > /home/thegod/.homebridge_harmony/config.json

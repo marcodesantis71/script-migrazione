@@ -28,6 +28,7 @@ path_nas="/share/CACHEDEV1_DATA/MASTER-BCK/"
 path_servizi="${path_nas}/SERVICE/"
 path_certificati="${path_nas}/CERTIFICATI/"
 path_homebridge="${path_nas}/HOMEBRIDGE/"
+path_rotate="${path_nas}/ROTATE/"
 path_mysql="${path_nas}/MYSQL"
 path_contenuti="${path_nas}/SITES/"
 path_scripts="${path_nas}/SCRIPTS/"
@@ -67,6 +68,7 @@ scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_servizi}/telegra
 scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_mysql}/*_${data}.sql /home/thegod/
 scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_certificati}/*_${data}.tar /home/thegod/
 scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_scripts}/*_${data}.sh /home/thegod/
+scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_rotate}/*_${data} /home/thegod/
 scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_servizi}/apache2/apache2_${data}.tar /home/thegod/
 scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_contenuti}/WebServer_*_${data}.tar.gz /home/thegod/
 scp -r -o StrictHostKeyChecking=no ${user_nas}@${ip_nas}:${path_servizi}/dovecot/dovecot_${data}.tar /home/thegod/
@@ -731,6 +733,9 @@ function install_grafana {
 	echo "deb https://packages.grafana.com/oss/deb stable main" | sudo tee /etc/apt/sources.list.d/grafana.list
 	apt-get update
 	apt install grafana -y
+	systemctl daemon-reload
+	systemctl enable grafana-server
+	systemctl start grafana-server
 }
 
 ## FUNZIONE RIAVVIO SERVIZI ##

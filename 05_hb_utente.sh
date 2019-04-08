@@ -131,6 +131,7 @@ sudo systemctl restart homebridge_casina
 sudo systemctl restart homebridge_lgtv
 sudo systemctl restart homebridge_security
 sudo systemctl restart homebridge_harmony
+sudo systemctl restart apache2
 sudo systemctl enable homebridge_casina
 sudo systemctl enable homebridge_lgtv
 sudo systemctl enable homebridge_security
