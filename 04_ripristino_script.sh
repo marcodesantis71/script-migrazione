@@ -82,7 +82,7 @@ echo "30 10 * * * /root/Script/rinnovo_certificati.sh renew > /var/log/certbot.l
 
 ## FUNZIONE RIPRISTINO ROTATE ##
 function ripristino_rotate {
-echo "RIPRISTINO CRONTAB $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
+echo "RIPRISTINO ROTATE $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
 cp /home/thegod/apache2_pers_${data} /etc/logrotate.d/
 cp /home/thegod/dovecot_${data} /etc/logrotate.d/
 cp /home/thegod/homebridge_{data} /etc/logrotate.d/
