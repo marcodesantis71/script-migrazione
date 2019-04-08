@@ -4,6 +4,7 @@
 # Lo script effettua:
 # 1) Check utente
 # 2) Installazione plugin (con retry in caso di errore)
+# 2.1) Attività varie
 # 3) Riavvio
 #
 # Script creato da Marco de Santis
