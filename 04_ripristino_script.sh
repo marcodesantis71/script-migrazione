@@ -53,6 +53,8 @@ chmod u+x /root/Script/rinnovo_certificati.sh
 chown -R thegod:thegod /home/thegod/Script
 chown thegod:crontab /var/spool/cron/crontabs/thegod
 chmod u+x /home/thegod/Script/Pulizia_VideoSorveglianza.sh
+chmod 600 /var/spool/cron/crontabs/thegod
+chmod 600 /var/spool/cron/crontabs/root
 }
 
 ## FUNZIONE RIPRISTINO CRONTAB ##

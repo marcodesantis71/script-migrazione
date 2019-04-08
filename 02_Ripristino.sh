@@ -375,6 +375,7 @@ function install_transmission {
 
 function crea_cartelle_transmission {
 	echo "Creo cartelle per transmissionbit $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+	systemctl stop transmission-daemon
 	mkdir -p /srv/Multimedia/Completi
 	mkdir -p /srv/Multimedia/Incompleti
 }
@@ -402,6 +403,7 @@ function modifica_conf_transmission {
         echo "    \"rpc-whitelist\": \"127.0.0.1, 192.168.123.*, 10.8.0.*\"" >> /var/lib/transmission-daemon/info/settings.json
         echo "}" >> /var/lib/transmission-daemon/info/settings.json
 	killall -HUP transmission-daemon
+	systemctl start transmission-daemon
 }
 
 function disabilita_ppa_transmission {
