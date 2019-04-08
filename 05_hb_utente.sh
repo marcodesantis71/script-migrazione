@@ -9,7 +9,7 @@
 # Script creato da Marco de Santis
 
 ## EXPORT VARIABILI ##
-data="04_04_2019_1000"
+data=""
 
 ## FUNZIONE INZIO SCRIPT ##
 function inizio_script {
@@ -23,6 +23,16 @@ echo "Controllo l'utente $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/05_hb_utent
 if [ "$(whoami)" != "thegod" ]; then
         echo "Lo script va lanciato con utente thegod"
         exit -1
+fi
+}
+
+## FUNZIONE CHECK DATA ##
+function check_data {
+echo "Verifico data $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+if [[ -z ${data} ]];
+then
+echo "Non hai inserito la data."
+exit
 fi
 }
 
@@ -144,6 +154,7 @@ echo "Rimuovo i file di backup $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/05_hb
 sudo  rm -rf *.tar
 sudo rm -rf *.sql
 sudo rm -rf home var etc
+sudo rm *_${data}
 }
 
 ## FUNZIONE ARCHIVIAZIONE ##
@@ -164,6 +175,7 @@ echo "Fine Script: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/Migrazione/Logs/0
 
 inizio_script
 check_utente
+check_data
 installa_foscam
 installa_webos
 installa_netatmo

@@ -621,6 +621,14 @@ if \$programname == 'homebridge_security' then /var/log/homebridge/homebridge_se
 if \$programname == 'homebridge_security' then stop     " >> /etc/rsyslog.d/50-default.conf
 }
 
+## FUNZIONE CHECK VERSIONE ##
+function check_versione {
+        echo "Check Versione: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
+        echo "La versione attuale di nodejs è:" &&  node -v
+        echo "La versione attuale di npm è:" &&  npm -v
+        echo "La versione di HomeBridge è:" && homebridge -V
+}
+
 ## FUNZIONE FINE SCRIPT ##
 function fine_script {
 echo "Fine Script: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
@@ -653,4 +661,5 @@ crea_binari
 sed_binari
 crea_link
 crea_log
+check_versione
 fine_script

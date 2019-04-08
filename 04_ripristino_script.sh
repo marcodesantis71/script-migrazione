@@ -83,10 +83,10 @@ echo "30 10 * * * /root/Script/rinnovo_certificati.sh renew > /var/log/certbot.l
 ## FUNZIONE RIPRISTINO ROTATE ##
 function ripristino_rotate {
 echo "RIPRISTINO ROTATE $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
-cp /home/thegod/apache2_pers_${data} /etc/logrotate.d/
-cp /home/thegod/dovecot_${data} /etc/logrotate.d/
-cp /home/thegod/homebridge_{data} /etc/logrotate.d/
-cp /home/thegod/spamassassin_{data} /etc/logrotate.d/
+cp /home/thegod/apache2_pers_${data} /etc/logrotate.d/apache2_pers
+cp /home/thegod/dovecot_${data} /etc/logrotate.d/dovecot
+cp /home/thegod/homebridge_${data} /etc/logrotate.d/homebridge
+cp /home/thegod/spamassassin_${data} /etc/logrotate.d/spamassassin
 chmod 644 /etc/logrotate.d/apache2_pers
 chmod 644 /etc/logrotate.d/dovecot
 chmod 644 /etc/logrotate.d/homebridge
@@ -95,7 +95,7 @@ chmod 644 /etc/logrotate.d/spamassassin
 
 ## FUNZIONE FINE SCRIPT ##
 function fine_script {
-echo "Fine Script: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/Migrazione/Logs/04_ripristino_script.log
+echo "Fine Script: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
 }
 
 inizio_script
