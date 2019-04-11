@@ -41,6 +41,7 @@ function crea_cartella {
 echo "Creo la cartella $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
 mkdir /root/Script
 mkdir /home/thegod/Script
+mkdir /home/thegod/Script/Logs
 }
 
 ## FUNZIONE RIPRISTINO SCRIPT ##
@@ -64,6 +65,7 @@ chmod u+x /root/Script/pulizia.sh
 chmod u+x /root/Script/clean_memory.sh
 chmod u+x /root/Script/rinnovo_certificati.sh
 chown -R thegod:thegod /home/thegod/Script
+chown  thegod:root /home/thegod/Script/Logs
 chown thegod:crontab /var/spool/cron/crontabs/thegod
 chmod u+x /home/thegod/Script/Pulizia_VideoSorveglianza.sh
 chmod 600 /var/spool/cron/crontabs/thegod
@@ -73,7 +75,7 @@ chmod 600 /var/spool/cron/crontabs/root
 ## FUNZIONE RIPRISTINO CRONTAB ##
 function ripristino_crontab {
 echo "RIPRISTINO CRONTAB $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
-echo "00 01 * * * /home/thegod/Script/Pulizia_VideoSorveglianza.sh pulisci >/dev/null 2>&1" | tee -a /var/spool/cron/crontabs/thegod
+echo "00 01 * * * /home/thegod/Script/Pulizia_VideoSorveglianza.sh pulisci >/home/thegod/Script/Logs/Pulizia_VideoSorveglianza_\`/bin/date +\\%d_\\%m_\\%Y\`.log 2>&1" | tee -a /var/spool/cron/crontabs/thegod
 echo "00 10 * * * /root/Script/bck.sh full > /dev/null 2>&1" | tee -a /var/spool/cron/crontabs/root
 echo "00 05 * * * /root/Script/pulizia.sh > /dev/null 2>&1" | tee -a /var/spool/cron/crontabs/root
 echo "00 * * * * /root/Script/clean_memory.sh > /dev/null 2>&1" | tee -a /var/spool/cron/crontabs/root
@@ -87,10 +89,12 @@ cp /home/thegod/apache2_pers_${data} /etc/logrotate.d/apache2_pers
 cp /home/thegod/dovecot_${data} /etc/logrotate.d/dovecot
 cp /home/thegod/homebridge_${data} /etc/logrotate.d/homebridge
 cp /home/thegod/spamassassin_${data} /etc/logrotate.d/spamassassin
+cp /home/thegod/Pulzia_Video_${data} /etc/logrotate.d/Pulizia_Video
 chmod 644 /etc/logrotate.d/apache2_pers
 chmod 644 /etc/logrotate.d/dovecot
 chmod 644 /etc/logrotate.d/homebridge
 chmod 644 /etc/logrotate.d/spamassassin
+chmod 644 /etc/logrotate.d/Pulizia_Video
 }
 
 ## FUNZIONE FINE SCRIPT ##
