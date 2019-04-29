@@ -49,6 +49,7 @@ function recupero_script {
 echo "Ripristino Script $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
 cp /home/thegod/bck_${data}.sh /root/Script/bck.sh
 cp /home/thegod/pulizia_${data}.sh /root/Script/pulizia.sh
+cp /home/thegod/update_homebridge_${data}.sh /root/Script/update_homebridge.sh
 cp /home/thegod/clean_memory_${data}.sh /root/Script/clean_memory.sh
 cp /home/thegod/rinnovo_certificati_${data}.sh /root/Script/rinnovo_certificati.sh
 cp /home/thegod/rsync_${data}.sh /root/Script/rsync.sh
