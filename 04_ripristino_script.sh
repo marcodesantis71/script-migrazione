@@ -90,7 +90,7 @@ cp /home/thegod/apache2_pers_${data} /etc/logrotate.d/apache2_pers
 cp /home/thegod/dovecot_${data} /etc/logrotate.d/dovecot
 cp /home/thegod/homebridge_${data} /etc/logrotate.d/homebridge
 cp /home/thegod/spamassassin_${data} /etc/logrotate.d/spamassassin
-cp /home/thegod/Pulzia_Video_${data} /etc/logrotate.d/Pulizia_Video
+cp /home/thegod/Pulizia_Video_${data} /etc/logrotate.d/Pulizia_Video
 chmod 644 /etc/logrotate.d/apache2_pers
 chmod 644 /etc/logrotate.d/dovecot
 chmod 644 /etc/logrotate.d/homebridge

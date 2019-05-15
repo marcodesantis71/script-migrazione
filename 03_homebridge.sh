@@ -39,7 +39,7 @@ fi
 ## FUNZIONE INSTALLAZIONE REPO ##
 function installa_repo {
 echo "Installo repository per ultima versione nodejs $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
-curl -sL https://deb.nodesource.com/setup_11.x | sudo bash -
+curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
 }
 
 ## FUNZIONE INSTALLAZIONE NODE E NPM ##

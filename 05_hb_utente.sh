@@ -29,7 +29,7 @@ fi
 
 ## FUNZIONE CHECK DATA ##
 function check_data {
-echo "Verifico data $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+echo "Verifico data $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/05_hb_utente.log
 if [[ -z ${data} ]];
 then
 echo "Non hai inserito la data."
