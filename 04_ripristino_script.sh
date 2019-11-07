@@ -48,12 +48,14 @@ mkdir /home/thegod/Script/Logs
 function recupero_script {
 echo "Ripristino Script $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
 cp /home/thegod/bck_${data}.sh /root/Script/bck.sh
+cp /home/thegod/check_nas_${data}.sh /root/Script/check_nas.sh
 cp /home/thegod/pulizia_${data}.sh /root/Script/pulizia.sh
 cp /home/thegod/update_homebridge_${data}.sh /root/Script/update_homebridge.sh
 cp /home/thegod/clean_memory_${data}.sh /root/Script/clean_memory.sh
 cp /home/thegod/rinnovo_certificati_${data}.sh /root/Script/rinnovo_certificati.sh
 cp /home/thegod/rsync_${data}.sh /root/Script/rsync.sh
 cp /home/thegod/Pulizia_VideoSorveglianza_${data}.sh /home/thegod/Script/Pulizia_VideoSorveglianza.sh
+
 }
 
 ## FUNZIONE RIPRISTINO PERMESSI ##
@@ -61,6 +63,7 @@ cp /home/thegod/Pulizia_VideoSorveglianza_${data}.sh /home/thegod/Script/Pulizia
 function repair_perm {
 echo "Riparo permessi $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/04_ripristino_script.log
 chmod u+x /root/Script/bck.sh
+chmod u+x /root/Script/check_nas.sh
 chmod u+x /root/Script/rsync.sh
 chmod u+x /root/Script/pulizia.sh
 chmod u+x /root/Script/clean_memory.sh
@@ -81,6 +84,7 @@ echo "00 10 * * * /root/Script/bck.sh full > /dev/null 2>&1" | tee -a /var/spool
 echo "00 05 * * * /root/Script/pulizia.sh > /dev/null 2>&1" | tee -a /var/spool/cron/crontabs/root
 echo "00 * * * * /root/Script/clean_memory.sh > /dev/null 2>&1" | tee -a /var/spool/cron/crontabs/root
 echo "30 10 * * * /root/Script/rinnovo_certificati.sh renew > /var/log/certbot.log" | tee -a /var/spool/cron/crontabs/root
+echo "*/5 * * * * /root/Script/check_nas.sh >> /var/log/check_nas.log" | tee -a /var/spool/cron/crontabs/root
 }
 
 ## FUNZIONE RIPRISTINO ROTATE ##

@@ -75,6 +75,7 @@ mkdir .homebridge_casina >> /home/thegod/03_homebridge.log
 mkdir .homebridge_lgtv >> /home/thegod/03_homebridge.log
 mkdir .homebridge_security >> /home/thegod/03_homebridge.log
 mkdir .homebridge_harmony >> /home/thegod/03_homebridge.log
+mkdir .homebridge_zwave >> /home/thegod/03_homebridge.log
 }
 
 ## FUNZIONE RIPRISTINO FILE KEY LGTV ##
@@ -319,6 +320,20 @@ echo "{
 }" > /home/thegod/.homebridge_security/config.json
 }
 
+## FUNZIONE CREAZIONE CONFIG.JSON ZWAVE ##
+function crea_config_zwave {
+echo "Creo file config.json lgvt $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
+echo "{
+    \"bridge\": {
+        \"name\": \"Zwave\",
+        \"username\": \"CC:22:3D:E3:CE:25\",
+        \"port\": 51830,
+        \"pin\": \"032-55-154\"
+    }
+}" > /home/thegod/.homebridge_zwave/config.json
+}
+
+
 ## FUNZIONE CREAZIONE CONFIG.JSON LGTV ##
 function crea_config_lgtv {
 echo "Creo file config.json lgvt $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
@@ -402,7 +417,6 @@ echo "{
         \"platform\": \"HarmonyHubWebSocket\",
     \"name\": \"Harmony_Hub\",
     \"hubIP\": \"192.168.123.66\",
-    \"TVPlatformMode\" : true,
     \"mainActivity\" : \"VediTV\",
     \"devicesToPublishAsAccessoriesSwitch\" : [\"SoundBar;VolumeUp\",\"SoundBar;VolumeDown\",\"SoundBar;Mute\",\"TV Leaving;ChannelUp\",\"TV Leaving;ChannelDown\",\"TV Leaving;Info\",\"TV Leaving;InputTv\",\"TV Leaving;Number1\",\"TV Leaving;Number2\",\"TV Leaving;Number3\",\"TV Leaving;Number4\",\"TV Leaving;Number5\",\"TV Leaving;Number6\",\"TV Leaving;Number7\",\"TV Leaving;Number8\",\"TV Leaving;Number9\",\"TV Leaving;Number0\"]
         }]
@@ -496,6 +510,31 @@ SyslogIdentifier=homebridge_harmony
 WantedBy=multi-user.target" > /etc/systemd/system/homebridge_harmony.service
 }
 
+## FUNZIONE CREAZIONE INIT ZWAVE ##
+function init_zawe {
+echo "CREO IL FILE DI HARMONY $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
+sudo echo "[Unit]
+Description=Node.js HomeKit Server
+After=syslog.target network-online.target
+
+[Service]
+Type=simple
+User=thegod
+EnvironmentFile=/etc/default/homebridge_zwave
+# Adapt this to your specific setup (could be /usr/bin/homebridge)
+# See comments below for more information
+ExecStart=/usr/bin/homebridge_zwave \$HOMEBRIDGE_OPTS
+Restart=on-failure
+RestartSec=3
+KillMode=process
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=homebridge_zwave
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/homebridge_zwave.service
+}
+
 ## FUNZIONE CREAZIONE INIT LGVT ##
 function init_lgvt {
 echo "CREO IL FILE DI LGTV $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
@@ -563,6 +602,18 @@ HOMEBRIDGE_OPTS=-D -I -U /home/thegod/.homebridge_harmony/
 # DEBUG=*" > /etc/default/homebridge_harmony
 }
 
+## FUNZIONE CONF DEMONE ZWAVE ##
+function conf_demone_zwave {
+echo "Creo i file di configurazione per l'istanza HARMONY $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
+sudo echo "# Defaults / Configuration options for homebridge
+# The following settings tells homebridge where to find the config.json file and where to persist the data (i.e. pairing and others)
+HOMEBRIDGE_OPTS=-D -I -U /home/thegod/.homebridge_zwave/
+
+# If you uncomment the following line, homebridge will log more
+# You can display this via systemd's journalctl: journalctl -f -u homebridge
+# DEBUG=*" > /etc/default/homebridge_zwave
+}
+
 ## FUNZIONE CONF DEMONE LGTV ##
 function conf_demone_lvtg {
 echo "Creo i file di configurazione per l'istanza LGTV $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
@@ -582,6 +633,7 @@ sudo cp /usr/lib/node_modules/homebridge/bin/homebridge /usr/lib/node_modules/ho
 sudo cp /usr/lib/node_modules/homebridge/bin/homebridge /usr/lib/node_modules/homebridge/bin/homebridge_lgtv
 sudo cp /usr/lib/node_modules/homebridge/bin/homebridge /usr/lib/node_modules/homebridge/bin/homebridge_security
 sudo cp /usr/lib/node_modules/homebridge/bin/homebridge /usr/lib/node_modules/homebridge/bin/homebridge_harmony
+sudo cp /usr/lib/node_modules/homebridge/bin/homebridge /usr/lib/node_modules/homebridge/bin/homebridge_zwave
 }
 
 ## FUNZIONE SED BINARI ISTANZE ##
@@ -591,6 +643,7 @@ sudo sed -i 's/homebridge/homebridge_casina/g' /usr/lib/node_modules/homebridge/
 sudo sed -i 's/homebridge/homebridge_lgtv/g' /usr/lib/node_modules/homebridge/bin/homebridge_lgtv
 sudo sed -i 's/homebridge/homebridge_security/g' /usr/lib/node_modules/homebridge/bin/homebridge_security
 sudo sed -i 's/homebridge/homebridge_harmony/g' /usr/lib/node_modules/homebridge/bin/homebridge_harmony
+sudo sed -i 's/homebridge/homebridge_zwave/g' /usr/lib/node_modules/homebridge/bin/homebridge_zwave
 }
 
 ## FUNZIONE LINK SIMBOLICI ##
@@ -600,6 +653,7 @@ sudo ln -s /usr/lib/node_modules/homebridge/bin/homebridge_casina /usr/bin/homeb
 sudo ln -s /usr/lib/node_modules/homebridge/bin/homebridge_lgtv /usr/bin/homebridge_lgtv
 sudo ln -s /usr/lib/node_modules/homebridge/bin/homebridge_security /usr/bin/homebridge_security
 sudo ln -s /usr/lib/node_modules/homebridge/bin/homebridge_harmony /usr/bin/homebridge_harmony
+sudo ln -s /usr/lib/node_modules/homebridge/bin/homebridge_zwave /usr/bin/homebridge_zwave
 }
 
 ## FUNZIONE LOG ##
@@ -618,7 +672,18 @@ if \$programname == 'homebridge_harmony' then /var/log/homebridge/homebridge_har
 if \$programname == 'homebridge_harmony' then stop
 
 if \$programname == 'homebridge_security' then /var/log/homebridge/homebridge_security.log
-if \$programname == 'homebridge_security' then stop     " >> /etc/rsyslog.d/50-default.conf
+if \$programname == 'homebridge_security' then stop     
+
+if \$programname == 'homebridge_zwave' then /var/log/homebridge/homebridge_zwave.log
+if \$programname == 'homebridge_zwave' then stop     " >> /etc/rsyslog.d/50-default.conf
+}
+
+## FUNZIONE GESTIONE FILE DI LOG HOMEBRIDGE ##
+function homebridge_log {
+echo "CREAZIONE LOG HOMEBRIDGE $(date "+%d%m%Y %H:%M:%S")" >> 
+/home/thegod/03_homebridge.log
+sudo mkdir /var/log/homebridge/
+sudo chown -R syslog:adm /var/log/homebridge
 }
 
 ## FUNZIONE CHECK VERSIONE ##
@@ -644,22 +709,27 @@ crea_cartelle
 key_lg
 crea_config_casina
 crea_config_security
+crea_config_zwave
 crea_config_lgtv
 crea_config_harmony
+crea_config_zwave
 cambio_permessi
 rimuovi_dir
 init_casina
 init_security
 init_harmony
+init_zawe
 init_lgvt
 permessi_init
 conf_demone_casina
 conf_demone_security
 conf_demone_harmony
+conf_demone_zwave
 conf_demone_lvtg
 crea_binari
 sed_binari
 crea_link
 crea_log
+homebridge_log
 check_versione
 fine_script
