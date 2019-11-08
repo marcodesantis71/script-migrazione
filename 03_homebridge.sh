@@ -327,7 +327,7 @@ echo "{
     \"bridge\": {
         \"name\": \"Zwave\",
         \"username\": \"CC:22:3D:E3:CE:25\",
-        \"port\": 51830,
+        \"port\": 51831,
         \"pin\": \"032-55-154\"
     }
 }" > /home/thegod/.homebridge_zwave/config.json
@@ -418,7 +418,7 @@ echo "{
     \"name\": \"Harmony_Hub\",
     \"hubIP\": \"192.168.123.66\",
     \"mainActivity\" : \"VediTV\",
-    \"devicesToPublishAsAccessoriesSwitch\" : [\"SoundBar;VolumeUp\",\"SoundBar;VolumeDown\",\"SoundBar;Mute\",\"TV Leaving;ChannelUp\",\"TV Leaving;ChannelDown\",\"TV Leaving;Info\",\"TV Leaving;InputTv\",\"TV Leaving;Number1\",\"TV Leaving;Number2\",\"TV Leaving;Number3\",\"TV Leaving;Number4\",\"TV Leaving;Number5\",\"TV Leaving;Number6\",\"TV Leaving;Number7\",\"TV Leaving;Number8\",\"TV Leaving;Number9\",\"TV Leaving;Number0\"]
+    \"devicesToPublishAsAccessoriesSwitch\" : [\"SoundBar|VolumeUP;VolumeUp\",\"SoundBar|VolumeDOWN;VolumeDown\",\"SoundBar|MUTE;Mute\",\"TV Leaving|ChannelUP;ChannelUp\",\"TV Leaving|ChannelDOWN;ChannelDown\",\"TV Leaving|INFO;Info\",\"TV Leaving|INPUT;InputTv\",\"TV Leaving|1;Number1\",\"TV Leaving|2;Number2\",\"TV Leaving|3;Number3\",\"TV Leaving|4;Number4\",\"TV Leaving|5;Number5\",\"TV Leaving|6;Number6\",\"TV Leaving|7;Number7\",\"TV Leaving|8;Number8\",\"TV Leaving|9;Number9\",\"TV Leaving|0;Number0\"]
         }]
 }" > /home/thegod/.homebridge_harmony/config.json
 }
@@ -680,8 +680,7 @@ if \$programname == 'homebridge_zwave' then stop     " >> /etc/rsyslog.d/50-defa
 
 ## FUNZIONE GESTIONE FILE DI LOG HOMEBRIDGE ##
 function homebridge_log {
-echo "CREAZIONE LOG HOMEBRIDGE $(date "+%d%m%Y %H:%M:%S")" >> 
-/home/thegod/03_homebridge.log
+echo "CREAZIONE LOG HOMEBRIDGE $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/03_homebridge.log
 sudo mkdir /var/log/homebridge/
 sudo chown -R syslog:adm /var/log/homebridge
 }

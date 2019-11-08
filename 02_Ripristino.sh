@@ -253,15 +253,19 @@ sed -i 's/^/#/' /etc/apache2/mods-enabled/fcgid.load
 ## FUNZIONE CARTELLE LOG APACHE2 ##
 function log_apache {
 echo "Creo le dir dei log di apache $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+mkdir /var/log/apache2/
 mkdir /var/log/apache2/default/
 mkdir /var/log/apache2/www.sistemiesistemi.it/
 mkdir /var/log/apache2/imap.sistemiesistemi.it/
+mkdir /var/log/apache2/imap.linux-guide.it/
+mkdir /var/log/apache2/imap.ilsistemistafolle.it/
 mkdir /var/log/apache2/vpn.sistemiesistemi.it/
 mkdir /var/log/apache2/webmail.sistemiesistemi.it/
 mkdir /var/log/apache2/cam-server.sistemiesistemi.it/
 mkdir /var/log/apache2/bck-server.sistemiesistemi.it/
 mkdir /var/log/apache2/www.linux-guide.it/
 mkdir /var/log/apache2/webmail.linux-guide.it/
+mkdir /var/log/apache2/webmail.dituttoedipiu.eu/
 mkdir /var/log/apache2/www.ilsistemistafolle.it/
 mkdir /var/log/apache2/www.dituttoedipiu.eu/
 mkdir /var/log/apache2/www.svapolandia.it/
@@ -738,6 +742,11 @@ function install_grafana {
 	systemctl start grafana-server
 }
 
+function fstab_nas {
+	echo "Installo grafana $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
+	echo "" >> /etc/fstab
+}
+
 ## FUNZIONE RIAVVIO SERVIZI ##
 function riavvio_servizi {
 echo "Riavvio e abilito tutti i servizi al boot $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
@@ -769,7 +778,7 @@ echo "Fine Script: $(date "+%d%m%Y %H:%M:%S")" >> /home/thegod/02_Ripristino.log
 inizio_script
 check_utente
 check_data
-recupero_bck
+ecupero_bck
 install_dhcp
 dhcp_log
 ripristino_dhcp
@@ -799,8 +808,8 @@ permessi_spamd
 ripristino_conf_posta
 prepara_dir
 ripristino_mail
-crea_dh
-abilita_dh
+#crea_dh
+#abilita_dh
 installa_mutt
 configura_mutt
 add_repo_trasmission
@@ -817,4 +826,5 @@ crea_db_influx
 install_telegraf
 ripristino_telegraf
 install_grafana
+fstab_nas
 riavvio_servizi
