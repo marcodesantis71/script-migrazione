@@ -418,7 +418,7 @@ echo "{
     \"name\": \"Harmony_Hub\",
     \"hubIP\": \"192.168.123.66\",
     \"mainActivity\" : \"VediTV\",
-    \"devicesToPublishAsAccessoriesSwitch\" : [\"SoundBar|Volume SU;VolumeUp\",\"SoundBar|Volume GIU;VolumeDown\",\"SoundBar|MUTE;Mute\",\"TV Leaving|1;Number1\",\"TV Leaving|2;Number2\",\"TV Leaving|3;Number3\",\"TV Leaving|4;Number4\",\"TV Leaving|5;Number5\",\"TV Leaving|6;Number6\",\"TV Leaving|7;Number7\",\"TV Leaving|8;Number8\",\"TV Leaving|9;Number9\",\"TV Leaving0;Number0\",\"Sky Italia DVR|Sky Canale SU;ChannelUp\",\"Sky Italia DVR|Sky Canale GIU;ChannelDown\"]
+    \"devicesToPublishAsAccessoriesSwitch\" : [\"SoundBar|Volume SU;VolumeUp\",\"SoundBar|Volume GIU;VolumeDown\",\"SoundBar|MUTE;Mute\",\"TV Leaving|1;Number1\",\"TV Leaving|2;Number2\",\"TV Leaving|3;Number3\",\"TV Leaving|4;Number4\",\"TV Leaving|5;Number5\",\"TV Leaving|6;Number6\",\"TV Leaving|7;Number7\",\"TV Leaving|8;Number8\",\"TV Leaving|9;Number9\",\"TV Leaving|0;Number0\",\"Sky Italia DVR|Sky Canale SU;ChannelUp\",\"Sky Italia DVR|Sky Canale GIU;ChannelDown\"]
         }]
 }" > /home/thegod/.homebridge_harmony/config.json
 }
